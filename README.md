@@ -1,101 +1,115 @@
 # 4EVERTOOLS
 
-Herramientas de audio del colectivo chileno 4EVER, gratis y sin cuentas. Versión **1.0.0**.
+Herramientas de audio del colectivo chileno **4EVER**. Son gratis, no piden cuenta y no tienen anuncios.
 
-## Qué tiene
+Convierte audio, mide BPM y tonalidad, edita samples y escucha al colectivo, todo desde el navegador.
 
-- **Conversor:** YouTube, un link directo o un archivo propio → MP3 320 o WAV de 16/24 bits. Conserva las etiquetas, avisa el tamaño antes de subir y muestra el progreso. Los archivos se borran a la hora, y el historial RECENT FILES queda en tu navegador.
-- **BPM + Key:** tempo, tonalidad y Camelot, calculados en el navegador. El audio nunca sale de tu equipo.
-- **4EVER LAB:** recortar, invertir, cambiar velocidad (keep pitch o tape), llevar a un BPM objetivo y cambiar el tono ±12 semitonos. Exporta WAV de 16/24 bits.
-- **Radio 4EVER:** 7 catálogos de SoundCloud del colectivo en un shuffle global.
-- **Collective:** un mundo por integrante (`#crew/<id>`), con sigilo, cameo en la radio y señales ocultas.
-- **Themes:**
-  - 9 mundos visuales: SÓTANO 4EVER, LINEA 4 EVER, RULE4EVER, 4EVERPALOOZA, LIBRETA NEGRA, 4EVERCHOX, SQUAREGODPANTS, 4EVERWOODS y 4EVERTALE.
-  - Un mundo secreto, 4EVER VISTA: escribe `#4ever` fuera de los campos de texto.
-  - En vez de describir el theme, la web muestra datos curiosos del underground.
-- **Sonidos:** cada theme suena con su propio pack sintetizado. Tus WAV pueden reemplazar cualquier sonido.
+---
 
-## Publicar en internet
+## Cómo se usa
 
-**Gratis:** la web va en **Vercel** y el conversor en **Render**. Ninguno de los dos pide tarjeta. Sigue **`DEPLOY.md`**:
+### Entrar
 
-1. Sube el repo `4ever-tool` a GitHub.
-2. En Render, crea un Blueprint (lee `render.yaml`).
-3. En Vercel, importa el repo y pon `VITE_API_URL`.
-4. Conecta las dos partes con `ALLOWED_ORIGINS`.
+Al abrir la web, elige **ENTER WITH SOUND** o **ENTER MUTED**. Puedes encender o apagar los sonidos de la interfaz cuando quieras con el parlante de arriba.
 
-El plan gratis tiene límites:
-- el conversor se duerme sin uso y tarda cerca de un minuto en despertar;
-- acepta archivos de hasta 100 MB;
-- hace una conversión a la vez.
+En la entrada y en el inicio aparece un **dato underground**: una curiosidad sobre artistas de la escena, como Reptilian Club Boyz, Hi-C, 1c34, Novagang, Shed Theory, Swaggerboyz, VRITNI o 4EVER. Con **OTRO DATO ↻** ves otra.
 
-**Servidor propio:** cuando haya presupuesto, `DEPLOY-VPS.md` deja todo en un solo servidor con Docker y HTTPS automático, sin esos límites.
+### URL CONVERTER: convertir audio
 
-## Usar en tu PC (Windows)
+1. Elige **PASTE LINK** o **UPLOAD FILE**.
+   - **PASTE LINK:** pega un link de YouTube o un link directo a un archivo de audio o video (`.mp3`, `.mp4`…).
+   - **UPLOAD FILE:** sube un archivo tuyo. La web te muestra el peso antes de subirlo.
+2. Elige el formato:
+   - **MP3:** calidad en kbps, hasta 320.
+   - **WAV:** 16 o 24 bits.
+3. Pulsa **COOK AUDIO** y espera la barra de progreso.
+4. Pulsa **DOWNLOAD FILE**.
 
-- **`iniciar.bat`**: instala lo que falte la primera vez, abre la API y la web, y luego el navegador. Para apagar, cierra las ventanas "4EVER API" y "4EVER WEB".
-- **`actualizar-yt-dlp.bat`**: úsalo si YouTube deja de convertir.
-- **`verificar.bat`**: corre la revisión completa y guarda el resultado en `verificacion-log.txt`. La revisión incluye:
-  - build;
-  - autopruebas de BPM, radio, tonalidad, conversor, colectivo, LAB, sonidos y datos underground;
-  - tests del backend;
-  - revisión del `.env` de producción;
-  - una prueba real con la API y YouTube.
+- Los archivos se borran del servidor a la hora.
+- En **RECENT FILES** quedan tus últimas conversiones mientras sigan disponibles. Esa lista se guarda solo en tu navegador.
+- Las etiquetas del archivo original (artista, título) se conservan.
+- Si cambias de pestaña mientras se convierte, la conversión sigue y la web la retoma al volver.
 
-Requisitos:
-- Node 22.18 o más nuevo.
-- Python 3.11 o más nuevo.
-- FFmpeg.
-- Para yt-dlp, Node o Deno.
+> Si aparece **WAKING UP THE CONVERTER**, el servidor estaba dormido. Tarda cerca de un minuto en despertar; mientras tanto, todo lo demás funciona.
 
-```bat
-winget install Gyan.FFmpeg
-winget install DenoLand.Deno   :: opcional
-```
+### BPM + KEY: tempo y tonalidad
 
-### A mano
+1. Arrastra una canción o un loop a la zona **DROP THE TRACK**.
+2. Si quieres, elige el **BPM RANGE** del género para ayudar a decidir entre half-time y double-time. Por ejemplo, trap o house.
+3. Verás:
+   - **BPM** exacto y otros tempos posibles (**OTHER PULSES**);
+   - **KEY** con su código Camelot;
+   - **MIXES WITH**: las tonalidades que mezclan bien con esa;
+   - **TUNING**: aparece si el tema no está afinado en 440 Hz.
 
-Backend:
+El análisis ocurre en tu navegador: **el audio nunca sale de tu equipo**.
 
-```bat
-cd backend
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-python -m unittest discover -s tests -v
-```
+### 4EVER LAB: editar un sample
 
-En http://localhost:8000/api/health revisa tres cosas: `ffmpeg` debe ser `true`, `ytdlp` debe mostrar una versión y `js_runtime` no debe ser `null`.
+1. Arrastra un sample, loop o tema. Sirve MP3, WAV, FLAC, M4A u OGG.
+2. Elige qué parte usar con **START / END** sobre la onda, o con **SELECT ALL**.
+3. Aplica lo que quieras:
+   - **REVERSE**: dar vuelta el audio;
+   - **SPEED**: cambiar la velocidad, con **KEEP PITCH** (mantiene el tono) o **TAPE** (como una cinta: el tono sube o baja con la velocidad);
+   - **TARGET BPM**: llevarlo a un BPM exacto;
+   - **PITCH**: subir o bajar hasta ±12 semitonos.
+4. Pulsa **RENDER** para escuchar el resultado. La web te dice qué BPM y tonalidad tendrá.
+5. Pulsa **DOWNLOAD WAV** (16 o 24 bits), o **MAKE AN MP3** para pasarlo al conversor.
 
-Frontend:
+Todo se procesa en tu navegador. No se sube nada.
 
-```bat
-npm install
-npm run dev
-```
+### RADIO 4EVER
 
-Autopruebas: `npm run test:bpm`, `test:key`, `test:radio`, `test:converter`, `test:collective`, `test:lab`, `test:sfx` y `test:lore`.
+La barra de abajo toca temas de 7 integrantes del colectivo, sacados de SoundCloud, en un shuffle global.
+- Tienes play, pausa y siguiente.
+- Hay un botón para un tema al azar de todo el colectivo y otro para uno del artista que está sonando.
+- El volumen de la radio es aparte del de la interfaz.
+- Mientras alguien suena, aparece su foto: tócala para abrir su mundo.
 
-## Personalizar
+### COLLECTIVE: los 10 integrantes
 
-| Qué | Dónde |
+Cada integrante tiene su tarjeta, con su avatar o foto y su sigilo.
+- Con **PLAY** suena en la radio.
+- Con **OPEN WORLD** entras a su mundo, que tiene colores, símbolo y link de SoundCloud propios.
+- Cada mundo tiene un link para compartir, del tipo `…/#crew/cinho`.
+
+**Señales ocultas:** escribe el nombre de un integrante en cualquier parte de la web, fuera de los campos de texto, y encuentras su señal. En el panel del colectivo se ve cuántas llevas.
+
+### THEMES: cambiar el mundo
+
+La web tiene 9 mundos visuales. Cada uno tiene su diseño y su propio pack de sonidos:
+
+| Theme | Estilo |
 |---|---|
-| Fotos, textos y links del colectivo | `COLLECTIVE.md` (explica todo paso a paso). Sin foto se ve su avatar de SoundCloud: se actualiza solo al construir la web, o a mano con `npm run avatars` |
-| Sonidos propios | WAV en `public/audio/sfx/` con los nombres de `public/audio/sfx/README.txt`. El que falte usa el sintetizador |
-| Datos underground | `src/data/lore.ts`: un dato corto por entrada, con su fuente |
-| Themes | `src/data/themes.ts` (nombres, textos, colores) y `src/worlds/` (cada mundo) |
-| Logos | `LOGO-MAP.md` |
+| SÓTANO 4EVER | Disquería en un sótano, con flyers y un cajón de vinilos |
+| LINEA 4 EVER | Estación de metro con graffiti y un tablero de salidas |
+| RULE4EVER | Web antigua, de los 2000 |
+| 4EVERPALOOZA | Festival, con láseres y el lineup del colectivo |
+| LIBRETA NEGRA | Sketchbook con pintura blanca |
+| 4EVERCHOX | Portal de cómics |
+| SQUAREGODPANTS | Fondo del mar en caricatura |
+| 4EVERWOODS | Etiqueta roja de hoja curada |
+| 4EVERTALE | RPG de 16 bits en negro y morado |
 
-## Carpetas
+Para cambiar de mundo:
+- Abre **THEMES** para elegir uno y escuchar su **SOUND PACK**. Con **RANDOM ON ENTRY** te toca uno distinto cada vez que entras.
+- O usa el botón de shuffle de arriba para cambiar al azar.
 
-```
-src/            web (React + Vite + TypeScript)
-  worlds/       el mundo visual de cada theme
-  data/         themes, colectivo, datos underground, logos heritage
-  lib/          motores: BPM, tonalidad, radio, conversor, LAB, sonidos
-backend/        API (FastAPI + FFmpeg + yt-dlp) y sus tests
-deploy/         CSP, proxy y Caddy (HTTPS) para producción
-public/         íconos, imagen para compartir, términos y privacidad
-scripts/        autopruebas
-```
+**Secreto:** escribe `#4ever` fuera de los campos de texto y se desbloquea **4EVER VISTA**.
+
+---
+
+## Privacidad
+
+- No hay cuentas, cookies de seguimiento ni analítica.
+- BPM + KEY y 4EVER LAB funcionan solo en tu navegador.
+- El conversor borra los archivos a la hora.
+
+Los términos y la privacidad están en `/legal.html`.
+
+## Para el colectivo
+
+- `DEPLOY.md`: cómo publicar la web gratis (Vercel + Render).
+- `COLLECTIVE.md`: cómo agregar fotos, textos y links de cada integrante.
+
+Hecho con React, Vite y FastAPI (FFmpeg + yt-dlp).
