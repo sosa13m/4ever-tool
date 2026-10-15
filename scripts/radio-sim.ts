@@ -80,7 +80,13 @@ export class FakeWidget implements RadioWidget {
     }, this.latency())
   }
 
-  play() { if (!this.playing) this.beginPlayback() }
+  // Real SoundCloud (checked in a browser): play() on a sound that is already
+  // playing restarts it and reports PAUSE immediately followed by PLAY.
+  play() {
+    if (!this.playing) { this.beginPlayback(); return }
+    this.emit('PAUSE')
+    this.emit('PLAY')
+  }
   pause() {
     this.starting += 1 // cancel a start in flight
     if (!this.playing) return
@@ -105,10 +111,12 @@ export class FakeWidget implements RadioWidget {
     this.clock.setTimeout(() => callback({ ...this.sounds[this.index] }), this.latency(10, 150))
   }
 
-  /** Test helper: the current sound reaches its end. SoundCloud then auto-advances. */
+  /** Test helper: the current sound reaches its end. Like real SoundCloud it reports
+   *  PAUSE, then FINISH, then auto-advances to the next sound in the list. */
   finish() {
     if (!this.playing) return
     this.playing = false
+    this.emit('PAUSE')
     this.emit('FINISH')
     const ticket = ++this.starting
     this.clock.setTimeout(() => {

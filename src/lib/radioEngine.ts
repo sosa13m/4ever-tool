@@ -14,8 +14,10 @@
  *  - a track that never starts (deleted, private, geo-blocked) is skipped;
  *  - every track enters the shuffle, including catalogs that load late or
  *    grow after the first read; no artist plays twice in a row if avoidable;
- *  - a pause we did not ask for right after a track change (SoundCloud pauses
- *    every other widget when one starts) is undone, so the radio keeps going;
+ *  - SoundCloud reports PAUSE right before PLAY whenever a sound (re)starts and
+ *    right before FINISH; those are not the user pausing, so a PAUSE only counts
+ *    if no PLAY/FINISH follows shortly. A pause right after a track change
+ *    (another widget auto-advancing) is undone, so the radio keeps going;
  *  - in a background tab the next track stays in the same widget, because
  *    browsers may not let a different player start while the tab is hidden.
  */
@@ -88,6 +90,10 @@ export type RadioOptions = {
 /** A pause of the current track this soon after a switch is treated as interference, not the user. */
 const INTERFERENCE_WINDOW_MS = 4000
 const MAX_INTERFERENCE_RETRIES = 3
+/** How long a PAUSE must stand (no PLAY/FINISH after it) before it counts as a real pause. */
+const PAUSE_SETTLE_MS = 700
+/** skip() already starts the sound; play() is only sent if nothing started by then. */
+const START_NUDGE_MS = 1500
 
 type Selection = { track: RadioTrack; token: number }
 
@@ -124,6 +130,7 @@ export class RadioEngine {
   private lastSuppressAt = Number.NEGATIVE_INFINITY
   private lastConfirmAt = Number.NEGATIVE_INFINITY
   private interferenceRetries = 0
+  private pendingPause: unknown = null
 
   constructor(members: RadioMember[], options: RadioOptions = {}) {
     this.members = members
@@ -165,6 +172,7 @@ export class RadioEngine {
   handlePlay(memberId: string): void {
     const widget = this.widgets.get(memberId)
     if (!widget) return
+    if (this.current?.memberId === memberId) this.cancelPendingPause()
     const selected = this.selection?.track ?? this.current
     // A widget we did not choose is playing (SoundCloud auto-advance after
     // FINISH, a late PLAY after we switched away, or music the user paused).
@@ -205,8 +213,19 @@ export class RadioEngine {
     // Pauses we caused (switching, user pause) are expected; a pause of the
     // confirmed track that we did not ask for is surfaced as "paused".
     if (this.selection || this.current?.memberId !== memberId || !this.wantPlay) return
+    // SoundCloud sends PAUSE just before PLAY (restart) and before FINISH: wait a
+    // moment and only treat it as a pause if nothing else follows.
+    this.cancelPendingPause()
+    this.pendingPause = this.timers.setTimeout(() => {
+      this.pendingPause = null
+      this.settlePause(memberId)
+    }, PAUSE_SETTLE_MS)
+  }
+
+  private settlePause(memberId: string): void {
+    if (this.selection || this.current?.memberId !== memberId || !this.wantPlay) return
     const now = this.now()
-    const nearSwitch = now - this.lastConfirmAt < INTERFERENCE_WINDOW_MS || now - this.lastSuppressAt < INTERFERENCE_WINDOW_MS
+    const nearSwitch = now - this.lastConfirmAt < INTERFERENCE_WINDOW_MS + PAUSE_SETTLE_MS || now - this.lastSuppressAt < INTERFERENCE_WINDOW_MS + PAUSE_SETTLE_MS
     if (nearSwitch && this.interferenceRetries < MAX_INTERFERENCE_RETRIES) {
       // Not the user: another widget's auto-advance made SoundCloud pause ours.
       this.interferenceRetries += 1
@@ -217,7 +236,14 @@ export class RadioEngine {
     this.emit()
   }
 
+  private cancelPendingPause(): void {
+    if (this.pendingPause) this.timers.clearTimeout(this.pendingPause)
+    this.pendingPause = null
+  }
+
   handleFinish(memberId: string): void {
+    // The PAUSE SoundCloud sent just before FINISH is the end of the song, not the user.
+    if (this.current?.memberId === memberId) this.cancelPendingPause()
     // Stop SoundCloud from auto-advancing inside this artist's list: the
     // engine decides what plays next.
     this.widgets.get(memberId)?.pause()
@@ -234,7 +260,6 @@ export class RadioEngine {
       const widget = this.widgets.get(track.memberId)
       if (!widget) return
       widget.skip(track.index)
-      widget.play()
       this.armWatchdog(track, token)
       return
     }
@@ -334,6 +359,7 @@ export class RadioEngine {
 
   dispose(): void {
     this.cancelSelection()
+    this.cancelPendingPause()
     for (const handle of this.refreshTimers) this.timers.clearTimeout(handle)
   }
 
@@ -450,10 +476,10 @@ export class RadioEngine {
     if (autoplay) this.wantPlay = true
     for (const [memberId, other] of this.widgets) if (memberId !== track.memberId) other.pause()
     widget.setVolume(this.volume)
+    // skip() starts the sound by itself. Calling play() on top makes SoundCloud
+    // restart it (PAUSE + PLAY), so only nudge if nothing has started by then.
     widget.skip(track.index)
-    // play() right away too: background tabs may delay the timer by a second or more.
-    if (autoplay) widget.play()
-    if (autoplay) this.timers.setTimeout(() => { if (this.token === token) widget.play() }, 40)
+    if (autoplay) this.timers.setTimeout(() => { if (this.token === token && this.selection) widget.play() }, START_NUDGE_MS)
     this.armWatchdog(track, token)
     this.emit()
   }

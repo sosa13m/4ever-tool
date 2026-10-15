@@ -195,6 +195,22 @@ const BASE: MemberSpec[] = [
   check('T12 back to the tab: the waiting track starts', engine.getState().current?.memberId === stuck.spec.id && playingWidgets(world).length === 1)
 }
 
+{ // T13 song after song with real SoundCloud events (PAUSE before FINISH, PAUSE+PLAY on restart)
+  let ok = 0
+  for (let seed = 1; seed <= 20; seed += 1) {
+    const world = makeWorld(BASE.map(spec => ({ ...spec, readyAt: 200 })), 300 + seed)
+    const engine = newEngine(world, 300 + seed)
+    world.clock.run(2000); engine.play(); world.clock.run(3000)
+    let alive = true
+    for (let k = 0; k < 10; k += 1) {
+      playingWidgets(world)[0]?.finish(); world.clock.run(4000)
+      if (playingWidgets(world).length !== 1 || !engine.getState().wantPlay) { alive = false; break }
+    }
+    if (alive) ok += 1
+  }
+  check('T13 the radio keeps playing through 10 song endings in a row (20 sessions)', ok === 20, `${ok}/20`)
+}
+
 // ---------------------------------------------------------------- stress: old vs new
 
 type Driver = {
