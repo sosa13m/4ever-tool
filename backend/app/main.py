@@ -23,6 +23,7 @@ from pydantic import BaseModel, Field
 from .media import MediaError, convert_media, describe_output, ensure_convertible, ffmpeg_available, probe_media
 from .security import RateLimiter, UnsafeUrlError, assert_public_http_url, assert_public_peer, has_free_space
 from .youtube import YoutubeError, download_audio, extract_video_id, is_youtube_url, ytdlp_version
+from .relay import HomeRelay, RelayError
 
 VERSION = "1.0.0"
 
@@ -43,6 +44,9 @@ MAX_REDIRECTS = int(os.getenv("MAX_REDIRECTS", "5"))
 RATE_LIMIT_REQUESTS = int(os.getenv("RATE_LIMIT_REQUESTS", "60"))
 RATE_LIMIT_WINDOW = int(os.getenv("RATE_LIMIT_WINDOW_SECONDS", "60"))
 TRUST_PROXY_HEADERS = env_bool("TRUST_PROXY_HEADERS", False)
+# Behind a Cloudflare tunnel (the home converter) only cf-connecting-ip can be
+# trusted: Cloudflare overwrites it, while X-Real-IP passes through from the visitor.
+CLIENT_IP_HEADER = os.getenv("CLIENT_IP_HEADER", "").strip().lower()
 # Production guards
 ENABLE_API_DOCS = env_bool("ENABLE_API_DOCS", True)
 MAX_QUEUED_JOBS = int(os.getenv("MAX_QUEUED_JOBS", "40"))
@@ -53,6 +57,10 @@ YTDLP_ENABLED = env_bool("YTDLP_ENABLED", True)
 YTDLP_ACCESS_KEY = os.getenv("YTDLP_ACCESS_KEY", "").strip()
 YTDLP_MAX_DURATION = int(os.getenv("YTDLP_MAX_DURATION_SECONDS", str(20 * 60)))
 YTDLP_JS_RUNTIMES = [item.strip() for item in os.getenv("YTDLP_JS_RUNTIMES", "deno,node").split(",") if item.strip()]
+# Which sources this server takes: the home converter only does YouTube.
+ACCEPT_SOURCES = {item.strip() for item in os.getenv("ACCEPT_SOURCES", "file,direct,youtube").split(",") if item.strip()}
+# Cloud server: shared key the home converter uses to report its tunnel address.
+home_relay = HomeRelay(os.getenv("HOME_RELAY_KEY", ""))
 
 logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO"))
 logger = logging.getLogger("4evertools")
@@ -161,7 +169,11 @@ def client_ip(request: Request) -> str:
     # Behind nginx every request comes from the proxy container, so the real
     # client IP must be read from X-Real-IP. Only trust it when configured,
     # otherwise anyone could spoof the header to dodge the rate limit.
-    if TRUST_PROXY_HEADERS:
+    if TRUST_PROXY_HEADERS and CLIENT_IP_HEADER:
+        trusted = request.headers.get(CLIENT_IP_HEADER, "").strip()
+        if trusted:
+            return trusted
+    elif TRUST_PROXY_HEADERS:
         forwarded = request.headers.get("x-real-ip") or request.headers.get("x-forwarded-for", "").split(",")[0]
         if forwarded.strip():
             return forwarded.strip()
@@ -341,11 +353,28 @@ def capabilities():
         "wav_bit_depths": ["16", "24"],
         "file_ttl_seconds": TTL_SECONDS,
         "youtube": {
-            "enabled": ytdlp_ready(),
+            "enabled": ytdlp_ready() and "youtube" in ACCEPT_SOURCES,
             "requires_key": bool(YTDLP_ACCESS_KEY),
             "max_duration_seconds": YTDLP_MAX_DURATION,
+            # Where the web should send YouTube links instead (the PC at home), if it is on.
+            "relay_url": home_relay.current(),
+            "relay_configured": home_relay.enabled,
         },
+        "sources": sorted(ACCEPT_SOURCES),
     }
+
+
+class RelayRegistration(BaseModel):
+    url: str
+
+
+@app.post("/api/relay/register")
+def relay_register(payload: RelayRegistration, request: Request):
+    try:
+        url = home_relay.register(payload.url, request.headers.get("x-relay-key", ""))
+    except RelayError as exc:
+        raise HTTPException(exc.status, str(exc)) from exc
+    return {"ok": True, "url": url}
 
 
 @app.post("/api/conversions", status_code=202)
@@ -384,11 +413,13 @@ async def create_conversion(
         # many ways); FFprobe decides. Only obvious non-media is turned away early.
         if (file.content_type or "").startswith(("text/", "image/")):
             raise HTTPException(415, "That is not an audio or video file")
+        if "file" not in ACCEPT_SOURCES:
+            raise HTTPException(403, "This converter only takes YouTube links")
         await save_upload(file, STORAGE / f"{job_id}.source")
         kind = "file"
         title = Path(file.filename or "").stem[:160] or None
     elif is_youtube_url(url or ""):
-        if not ytdlp_ready():
+        if "youtube" not in ACCEPT_SOURCES or not ytdlp_ready():
             raise HTTPException(400, "YouTube conversion is not enabled on this server")
         if YTDLP_ACCESS_KEY and not hmac.compare_digest((access_key or "").encode(), YTDLP_ACCESS_KEY.encode()):
             raise HTTPException(403, "A valid collective access key is required for YouTube links")
@@ -398,6 +429,8 @@ async def create_conversion(
             raise HTTPException(400, str(exc)) from exc
         kind = "youtube"
     else:
+        if "direct" not in ACCEPT_SOURCES:
+            raise HTTPException(403, "This converter only takes YouTube links")
         try:
             await assert_public_http_url(url or "")
         except UnsafeUrlError as exc:

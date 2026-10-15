@@ -25,6 +25,10 @@ services:
       - key: STORAGE_DIR
         value: /app/storage
       # YouTube is open for everyone. To close it, add YTDLP_ACCESS_KEY (12+ characters) in Render.
+      # YouTube blocks cloud servers, so YouTube links are converted on the PC at home
+      # (conversor-casa.bat). Paste here the same HOME_RELAY_KEY that is in casa.env.
+      - key: HOME_RELAY_KEY
+        sync: false
       - key: YTDLP_ENABLED
         value: "true"
       - key: YTDLP_MAX_DURATION_SECONDS

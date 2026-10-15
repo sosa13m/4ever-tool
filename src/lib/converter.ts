@@ -28,7 +28,12 @@ export type HistoryEntry = {
 }
 
 /** The job being converted right now; survives switching to BPM + KEY and back. */
-export type ActiveJob = { id: string; format: ConvertFormat; quality: string; bitDepth: string; title: string | null; startedAt: number }
+/** apiBase: the server that runs this job when it is not the main API (YouTube on the PC at home). */
+export type ActiveJob = { id: string; format: ConvertFormat; quality: string; bitDepth: string; title: string | null; startedAt: number; apiBase?: string }
+
+/** Full URL of an API path for this job: its own server, or the main API. */
+export const HOME_TUNNEL = /^https:\/\/[a-z0-9]+(?:-[a-z0-9]+)*\.trycloudflare\.com$/
+export const jobUrl = (job: Pick<ActiveJob, 'apiBase'>, path: string) => (job.apiBase ? `${job.apiBase.replace(/\/+$/, '')}${path}` : apiUrl(path))
 
 const HISTORY_KEY = '4ever-converter-history'
 const ACTIVE_KEY = '4ever-converter-active'
@@ -90,7 +95,10 @@ export function clearHistory(store: StorageLike | null = storage('local')) {
 export function loadActiveJob(store: StorageLike | null = storage('session')): ActiveJob | null {
   const job = readJson<ActiveJob>(store, ACTIVE_KEY)
   // A job older than 30 min is not "running" any more: the server gave up on it long ago.
-  return job && typeof job.id === 'string' && Date.now() - job.startedAt < 30 * 60 * 1000 ? job : null
+  if (!job || typeof job.id !== 'string' || Date.now() - job.startedAt >= 30 * 60 * 1000) return null
+  // Only the PC at home (a Cloudflare quick tunnel) may run a job somewhere else.
+  if (job.apiBase !== undefined && !HOME_TUNNEL.test(job.apiBase)) return null
+  return job
 }
 
 export function saveActiveJob(job: ActiveJob | null, store: StorageLike | null = storage('session')) {

@@ -2,7 +2,7 @@
  * Converter helpers self-test (history, active job, file details).
  * Run:  npm run test:converter   (Node 22.18+)
  */
-import { addToHistory, clearHistory, describeOutput, formatBytes, formatDuration, loadActiveJob, loadHistory, pruneHistory, saveActiveJob, timeLeft, type HistoryEntry } from '../src/lib/converter.ts'
+import { addToHistory, clearHistory, describeOutput, formatBytes, formatDuration, jobUrl, loadActiveJob, loadHistory, pruneHistory, saveActiveJob, timeLeft, type HistoryEntry } from '../src/lib/converter.ts'
 
 class MemoryStorage {
   data = new Map<string, string>()
@@ -51,6 +51,16 @@ saveActiveJob({ id: 'old', format: 'mp3', quality: '320', bitDepth: '16', title:
 check(loadActiveJob(session) === null, 'a 31-minute-old job is not resumed')
 saveActiveJob(null, session)
 check(loadActiveJob(session) === null, 'finished job is forgotten')
+
+// YouTube jobs run on the PC at home (a Cloudflare quick tunnel); everything else on the main API.
+const home = 'https://quiet-river-bold-moon.trycloudflare.com'
+check(jobUrl({ apiBase: home }, '/api/conversions/x') === `${home}/api/conversions/x` && jobUrl({ apiBase: `${home}/` }, '/api/x') === `${home}/api/x`, 'home jobs talk to the home PC')
+check(jobUrl({}, '/api/conversions/x').endsWith('/api/conversions/x') && !jobUrl({}, '/api/x').includes('trycloudflare'), 'other jobs talk to the main API')
+saveActiveJob({ id: 'yt', format: 'mp3', quality: '320', bitDepth: '16', title: null, startedAt: Date.now(), apiBase: home }, session)
+check(loadActiveJob(session)?.apiBase === home, 'a running home job resumes on the home PC')
+saveActiveJob({ id: 'evil', format: 'mp3', quality: '320', bitDepth: '16', title: null, startedAt: Date.now(), apiBase: 'https://evil.example' }, session)
+check(loadActiveJob(session) === null, 'a job pointing anywhere else is ignored')
+saveActiveJob(null, session)
 
 // Human-readable details.
 const wav = { format: 'wav', bytes: 55_300_000, duration: 192.4, sample_rate: 48000, channels: 2, codec: 'pcm_s24le', bit_rate: 2304000 }

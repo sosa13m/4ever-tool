@@ -5,7 +5,8 @@ La web y el conversor viven en dos servicios gratis, sin tarjeta:
 | Parte | Dónde | Qué hace |
 |---|---|---|
 | **La web** | **Vercel** | Themes, radio, BPM + Key, 4EVER LAB, colectivo. Todo esto corre en el navegador. |
-| **El conversor (API)** | **Render** | FFmpeg + yt-dlp en un contenedor Docker (`render.yaml`). |
+| **El conversor (API)** | **Render** | FFmpeg en un contenedor Docker (`render.yaml`). Convierte archivos y links directos. |
+| **El conversor de YouTube** | **Un PC en casa** | `conversor-casa.bat`. YouTube bloquea a los servidores en la nube, pero no a una conexión de casa. |
 
 Las dos partes se conectan con dos datos: `VITE_API_URL` en Vercel y `ALLOWED_ORIGINS` en Render.
 
@@ -15,7 +16,7 @@ Las dos partes se conectan con dos datos: `VITE_API_URL` en Vercel y `ALLOWED_OR
 >   - archivos de hasta **100 MB**;
 >   - **una conversión a la vez**.
 > - **Unos 5 GB de descargas al mes** entre todos. Cada MP3 pesa unos 8 MB y cada WAV unos 50 MB.
-> - **YouTube** a veces bloquea a los servidores en la nube ("confirma que no eres un bot"). Si pasa, los archivos y los links directos siguen funcionando.
+> - **YouTube** bloquea a los servidores en la nube ("confirma que no eres un bot"). Por eso los links de YouTube se convierten en un PC de casa (sección 6).
 >
 > Cuando tengan presupuesto, `DEPLOY-VPS.md` explica cómo pasar todo a un servidor propio sin estos límites.
 
@@ -74,6 +75,41 @@ En la web publicada:
 
 Si el conversor no responde, revisa `ALLOWED_ORIGINS` en Render y `VITE_API_URL` en Vercel: son los dos errores más comunes.
 
+## 6. El conversor de YouTube en casa
+
+YouTube no deja descargar desde Render, pero sí desde una conexión de casa. Por eso un PC de casa convierte los links de YouTube:
+- `conversor-casa.bat` levanta el conversor en ese PC (solo acepta links de YouTube).
+- Lo publica en internet con un túnel gratis de Cloudflare. No hay que abrir puertos del router.
+- Cada minuto le avisa a Render la dirección del túnel. La web le pregunta a Render y manda ahí los links de YouTube.
+- Si el PC está apagado, la web lo dice: *THE YOUTUBE CONVERTER IS OFF RIGHT NOW*. Los archivos y los links directos siguen funcionando en Render.
+- Mientras está prendido, el aviso de cada minuto también mantiene despierto a Render.
+
+### Preparar el PC (una sola vez)
+
+1. Necesitas Python y FFmpeg. Si ya usaste `iniciar.bat`, los tienes.
+2. Instala cloudflared. En una terminal:
+   ```
+   winget install --id Cloudflare.cloudflared
+   ```
+3. Abre `conversor-casa.bat`. La primera vez crea `casa.env` con una clave nueva, la muestra y se detiene.
+4. En Render, ve a **4ever-tool-api → Environment → Add Environment Variable**:
+   - Key: `HOME_RELAY_KEY`
+   - Value: la clave que mostró el `.bat`. También está en `casa.env`.
+5. Pulsa **Save** y espera a que Render reinicie.
+6. Abre `conversor-casa.bat` otra vez. Cuando diga *Render ya sabe donde estoy*, prueba un link de YouTube en la web.
+
+`casa.env` no se sube a GitHub (está en `.gitignore`). No compartas la clave.
+
+### Dejarlo siempre prendido
+
+- Mientras la ventana está abierta, el script le pide a Windows que no se suspenda. La pantalla sí se puede apagar.
+- No cierres la tapa si es un notebook, y déjalo enchufado.
+- Para que parta solo al prender el PC:
+  1. Pulsa **Win + R** y escribe `shell:startup`.
+  2. En esa carpeta, crea un acceso directo a `conversor-casa.bat`.
+- Si se corta internet o se cae el túnel, el script abre uno nuevo solo. La web se entera en uno o dos minutos.
+- Cada vez que lo abres, actualiza yt-dlp. Si YouTube deja de convertir, ciérralo y ábrelo de nuevo.
+
 ## Publicar cambios
 
 Haz `git push` a `main`.
@@ -82,11 +118,13 @@ Haz `git push` a `main`.
 
 ## Si YouTube deja de convertir
 
-En Render, ve a **4ever-tool-api → Manual Deploy → Clear build cache & deploy**. Eso instala la versión más nueva de yt-dlp.
+1. Revisa que la ventana de `conversor-casa.bat` siga abierta y sin avisos.
+2. Si está abierta, ciérrala y ábrela de nuevo: así se actualiza yt-dlp.
+3. Si dice que Render rechazó la clave, revisa que `HOME_RELAY_KEY` sea igual en Render y en `casa.env`.
 
 ## Qué protege a la web
 
 - **HTTPS** en las dos partes, automático.
-- **Cabeceras de seguridad y política de contenido (CSP)** en `vercel.json`. Solo permiten este sitio, el conversor en Render, el reproductor de SoundCloud y Google Fonts.
-- **El conversor** solo acepta pedidos desde tu web (`ALLOWED_ORIGINS`). También tiene límites por persona y por servidor, se niega a descargar direcciones internas, oculta su documentación y borra los archivos a la hora.
+- **Cabeceras de seguridad y política de contenido (CSP)** en `vercel.json`. Solo permiten este sitio, el conversor en Render, el túnel de Cloudflare del PC de casa, el reproductor de SoundCloud y Google Fonts.
+- **El conversor** solo acepta pedidos desde tu web (`ALLOWED_ORIGINS`). Render solo acepta direcciones de túnel `https://….trycloudflare.com`, y solo con la clave `HOME_RELAY_KEY`; nadie más puede desviar los links de YouTube. También tiene límites por persona y por servidor, se niega a descargar direcciones internas, oculta su documentación y borra los archivos a la hora.
 - **Sin rastreo**: no hay cookies de seguimiento ni analítica. Los términos y la privacidad están en `/legal.html`.

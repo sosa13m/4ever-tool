@@ -16,7 +16,7 @@ import { getSfxSources, getSfxVolume, playSfx, setSfxEnabled, setSfxTheme, setSf
 import type { SfxName } from './lib/sfx'
 import { PACK_LABEL, packForTheme } from './lib/sfxSynth'
 import { RadioEngine, type RadioState, type RadioStatus } from './lib/radioEngine'
-import { addToHistory, clearHistory, describeOutput, formatBytes, loadActiveJob, loadHistory, postConversion, saveActiveJob, timeLeft, type ActiveJob, type ConvertFormat, type HistoryEntry, type OutputInfo } from './lib/converter'
+import { addToHistory, clearHistory, describeOutput, formatBytes, HOME_TUNNEL, jobUrl, loadActiveJob, loadHistory, postConversion, saveActiveJob, timeLeft, type ActiveJob, type ConvertFormat, type HistoryEntry, type OutputInfo } from './lib/converter'
 import { AeroGadget, AeroWorld } from './worlds/AeroWorld'
 import { AquaWorld } from './worlds/AquaWorld'
 import { LegacyFooter, LegacyWarning, LegacyWorld } from './worlds/LegacyWorld'
@@ -618,8 +618,12 @@ function ThemeDrawer({ open, current, mode, sfxVolume, uiSound, onSfxVolume, onC
   </>}</AnimatePresence>
 }
 
+const HOME_PC_OFF = 'THE YOUTUBE CONVERTER (THE 4EVER PC AT HOME) IS OFF RIGHT NOW. TRY AGAIN LATER, OR UPLOAD THE AUDIO FILE.'
+const HOME_PC_UNREACHABLE = "THE YOUTUBE CONVERTER (THE 4EVER PC AT HOME) ISN'T ANSWERING. TRY AGAIN IN A FEW MINUTES, OR UPLOAD THE AUDIO FILE."
+
 type ConverterCapabilities = {
-  youtube: { enabled: boolean; requires_key: boolean; max_duration_seconds: number }
+  /** relay_url: the PC at home that converts YouTube links (cloud servers get blocked), when it is on. */
+  youtube: { enabled: boolean; requires_key: boolean; max_duration_seconds: number; relay_url?: string | null; relay_configured?: boolean }
   max_source_bytes: number
   file_ttl_seconds?: number
 }
@@ -712,7 +716,9 @@ function Converter({ incoming }: { incoming?: { file: File; nonce: number } | nu
   const busy = status === 'submitting' || status === 'uploading' || status === 'queued' || status === 'fetching' || status === 'processing'
   const youtubeLink = mode === 'url' && isYoutubeLink(url)
   const youtube = capabilities?.youtube
-  const youtubeBlocked = youtubeLink && youtube !== undefined && !youtube.enabled
+  const youtubeBlocked = youtubeLink && youtube !== undefined && !youtube.enabled && !youtube.relay_configured
+  // The PC at home is set up but has not checked in lately: say so before anyone presses COOK.
+  const youtubeHomeOff = youtubeLink && Boolean(youtube?.relay_configured) && !youtube?.relay_url
   const needsKey = youtubeLink && Boolean(youtube?.requires_key)
   const maxBytes = capabilities?.max_source_bytes ?? null
   const fileTooBig = mode === 'file' && Boolean(sourceFile && maxBytes && sourceFile.size > maxBytes)
@@ -736,10 +742,11 @@ function Converter({ incoming }: { incoming?: { file: File; nonce: number } | nu
     const expiresAt = payload.expires_at ? payload.expires_at * 1000 : Date.now() + (capabilities?.file_ttl_seconds ?? 3600) * 1000
     const entryTitle = payload.title || job.title || `4EVERTOOLS-${id.slice(0, 8).toUpperCase()}`
     setNow(Date.now())
-    setDownloadUrl(apiUrl(payload.download_url ?? `/api/conversions/${id}/download`))
+    const download = jobUrl(job, payload.download_url ?? `/api/conversions/${id}/download`)
+    setDownloadUrl(download)
     setResultDetail(detail)
     setResultExpires(expiresAt)
-    setHistory(addToHistory({ id, title: entryTitle, format: job.format, detail, downloadUrl: apiUrl(payload.download_url ?? `/api/conversions/${id}/download`), finishedAt: Date.now(), expiresAt }))
+    setHistory(addToHistory({ id, title: entryTitle, format: job.format, detail, downloadUrl: download, finishedAt: Date.now(), expiresAt }))
     void playSfx('download-ready')
   }
 
@@ -747,7 +754,7 @@ function Converter({ incoming }: { incoming?: { file: File; nonce: number } | nu
     const stale = () => gen !== generation.current
     if (stale()) return
     try {
-      const response = await fetch(apiUrl(`/api/conversions/${id}`))
+      const response = await fetch(jobUrl(job, `/api/conversions/${id}`))
       if (stale()) return
       if (response.status === 429) {
         pollTimer.current = window.setTimeout(() => void pollJob(id, job, gen), 3000)
@@ -791,6 +798,17 @@ function Converter({ incoming }: { incoming?: { file: File; nonce: number } | nu
     }
   }
 
+  // A YouTube link was pasted: ask again whether the PC at home is on (it may have changed since the page loaded).
+  useEffect(() => {
+    if (!youtubeLink) return
+    let live = true
+    fetch(apiUrl('/api/capabilities'))
+      .then(response => response.ok ? readJson<ConverterCapabilities>(response) : null)
+      .then(payload => { if (live && payload) setCapabilities(payload) })
+      .catch(() => undefined)
+    return () => { live = false }
+  }, [youtubeLink])
+
   const startConversion = async () => {
     if (busy || fileTooBig) return
     resetJob()
@@ -800,6 +818,15 @@ function Converter({ incoming }: { incoming?: { file: File; nonce: number } | nu
     setMessage(youtubeLink ? 'SENDING YOUTUBE LINK…' : mode === 'file' ? 'UPLOADING…' : 'SENDING LINK…')
     const job: ActiveJob = { id: '', format, quality, bitDepth, title: mode === 'file' ? sourceFile?.name.replace(/\.[^.]+$/, '') ?? null : null, startedAt: Date.now() }
     try {
+      if (youtubeLink) {
+        // YouTube blocks cloud servers, so YouTube links go to the 4EVER PC at home
+        // when it is on. Ask fresh: it may have come online since the page loaded.
+        const fresh = await fetch(apiUrl('/api/capabilities')).then(response => response.ok ? readJson<ConverterCapabilities>(response) : null).catch(() => null)
+        if (fresh) setCapabilities(fresh)
+        const info = (fresh ?? capabilities)?.youtube
+        if (info?.relay_url && HOME_TUNNEL.test(info.relay_url)) job.apiBase = info.relay_url
+        else if (info?.relay_configured) throw new Error(HOME_PC_OFF)
+      }
       const form = new FormData()
       form.set('format', format)
       form.set('quality', quality)
@@ -818,12 +845,13 @@ function Converter({ incoming }: { incoming?: { file: File; nonce: number } | nu
         // Upload is the first 4 % of the bar's journey; the server's own steps take over from there.
         setProgress(Math.round(fraction * 4))
         setMessage(fraction < 1 ? `UPLOADING ${Math.round(fraction * 100)}%${sourceFile ? ` OF ${formatBytes(sourceFile.size)}` : ''}…` : 'UPLOAD DONE · CHECKING THE FILE…')
-      } : undefined)
+      } : undefined, jobUrl(job, '/api/conversions'))
       if (code < 200 || code >= 300 || !payload?.id) {
         const detail = typeof payload?.detail === 'string' ? payload.detail : null
         if (code === 413) throw new Error(detail ?? 'FILE IS TOO BIG FOR THE SERVER')
         if (code === 429) throw new Error(detail ?? 'TOO MANY REQUESTS. WAIT A MOMENT')
         if (code === 415) throw new Error(detail ?? 'THAT IS NOT AN AUDIO OR VIDEO FILE')
+        if ((code === 0 || code >= 502) && job.apiBase) throw new Error(HOME_PC_UNREACHABLE)
         if (code === 0 || code >= 502) throw new Error("CAN'T REACH THE CONVERTER SERVER. TRY AGAIN IN A MOMENT")
         throw new Error(detail ?? `CONVERSION REJECTED (HTTP ${code})`)
       }
@@ -839,7 +867,7 @@ function Converter({ incoming }: { incoming?: { file: File; nonce: number } | nu
     } catch (error) {
       setStatus('error')
       void playSfx('error')
-      const text = error instanceof TypeError ? "CAN'T REACH THE CONVERTER SERVER. TRY AGAIN IN A MOMENT" : error instanceof Error ? error.message : 'CONVERSION FAILED'
+      const text = error instanceof TypeError ? (job.apiBase ? HOME_PC_UNREACHABLE : "CAN'T REACH THE CONVERTER SERVER. TRY AGAIN IN A MOMENT") : error instanceof Error ? error.message : 'CONVERSION FAILED'
       setMessage(text.toUpperCase())
     }
   }
@@ -881,10 +909,12 @@ function Converter({ incoming }: { incoming?: { file: File; nonce: number } | nu
             </div>
           </label>
           {youtubeLink && (
-            <div className={`source-badge ${youtubeBlocked ? 'blocked' : ''}`}>
+            <div className={`source-badge ${youtubeBlocked || youtubeHomeOff ? 'blocked' : ''}`}>
               <Zap size={14} />
               {youtubeBlocked
                 ? 'YOUTUBE IS DISABLED ON THIS SERVER'
+                : youtubeHomeOff
+                ? 'THE YOUTUBE CONVERTER IS OFF RIGHT NOW · TRY LATER OR UPLOAD THE AUDIO FILE'
                 : `YOUTUBE DETECTED · AUDIO ONLY · SINGLE VIDEOS${maxMinutes ? ` UP TO ${maxMinutes} MIN` : ''}`}
             </div>
           )}

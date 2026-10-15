@@ -17,6 +17,7 @@ from app.media import MediaError, Probe, convert_media, describe_output, ensure_
 from app.preflight import check_env, parse_env
 from app.security import RateLimiter, UnsafeUrlError, assert_public_http_url, assert_public_peer, has_free_space, is_public_address, peer_ip
 from app import youtube
+from app.relay import HomeRelay, RelayError
 from app.youtube import YoutubeError, extract_video_id, friendly_error, is_youtube_url
 
 HAS_FFMPEG = bool(shutil.which("ffmpeg") and shutil.which("ffprobe"))
@@ -124,6 +125,76 @@ class ProductionGuardTests(unittest.TestCase):
         errors = [message for level, message in results if level == "ERROR"]
         self.assertTrue(errors and all("DOMAIN" in m or "ALLOWED_ORIGINS" in m for m in errors), errors)
         self.assertEqual(parse_env(example.read_text(encoding="utf-8")).get("YTDLP_ACCESS_KEY"), "")
+
+
+class HomeRelayTests(unittest.TestCase):
+    """The PC at home tells the cloud API where its tunnel is."""
+
+    KEY = "una-clave-larga-de-la-casa-0123456789"
+    URL = "https://alpha-beta-42.trycloudflare.com"
+
+    def test_disabled_without_key(self):
+        relay = HomeRelay("")
+        self.assertFalse(relay.enabled)
+        with self.assertRaises(RelayError) as ctx:
+            relay.register(self.URL, "")
+        self.assertEqual(ctx.exception.status, 404)
+        self.assertIsNone(relay.current())
+
+    def test_wrong_key_is_refused(self):
+        relay = HomeRelay(self.KEY)
+        for key in ["", "otra-clave", self.KEY[:-1]]:
+            with self.assertRaises(RelayError) as ctx:
+                relay.register(self.URL, key)
+            self.assertEqual(ctx.exception.status, 403)
+        self.assertIsNone(relay.current())
+
+    def test_only_quick_tunnel_addresses(self):
+        relay = HomeRelay(self.KEY)
+        for url in ["http://alpha.trycloudflare.com", "https://evil.com", "https://alpha.trycloudflare.com.evil.com",
+                    "https://alpha.trycloudflare.com/path", "https://a_b.trycloudflare.com", "https://user@alpha.trycloudflare.com",
+                    "javascript:alert(1)", ""]:
+            with self.assertRaises(RelayError, msg=url) as ctx:
+                relay.register(url, self.KEY)
+            self.assertEqual(ctx.exception.status, 400)
+
+    def test_register_then_expire(self):
+        relay = HomeRelay(self.KEY, ttl_seconds=180)
+        self.assertEqual(relay.register(self.URL.upper() + "/", self.KEY, now=1000), self.URL)
+        self.assertEqual(relay.current(now=1100), self.URL)
+        self.assertEqual(relay.current(now=1180), self.URL)
+        self.assertIsNone(relay.current(now=1181))
+        relay.register("https://new-one.trycloudflare.com", self.KEY, now=2000)
+        self.assertEqual(relay.current(now=2001), "https://new-one.trycloudflare.com")
+        relay.forget()
+        self.assertIsNone(relay.current(now=2002))
+
+
+class HomeConverterScriptTests(unittest.TestCase):
+    def setUp(self):
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+        import home_converter
+        self.home = home_converter
+
+    def tearDown(self):
+        sys.path.pop(0)
+
+    def test_finds_tunnel_address_in_cloudflared_output(self):
+        line = "2026-10-15T12:00:00Z INF |  https://quiet-river-bold-moon.trycloudflare.com                    |"
+        self.assertEqual(self.home.TUNNEL_URL.search(line).group(0), "https://quiet-river-bold-moon.trycloudflare.com")
+        self.assertIsNone(self.home.TUNNEL_URL.search("INF Requesting new quick Tunnel on trycloudflare.com..."))
+
+    def test_reads_casa_env(self):
+        values = self.home.parse_env("# x\nCLOUD_API_URL=https://api.example/\nHOME_RELAY_KEY='abc'\n\nBROKEN\n")
+        self.assertEqual(values, {"CLOUD_API_URL": "https://api.example/", "HOME_RELAY_KEY": "abc"})
+
+    def test_home_api_only_takes_youtube_and_trusts_cloudflare_ip(self):
+        env = self.home.api_env({"WEB_ORIGIN": "https://4ever-tool.vercel.app", "PORT": "8010"})
+        self.assertEqual(env["ACCEPT_SOURCES"], "youtube")
+        self.assertEqual(env["ALLOWED_ORIGINS"], "https://4ever-tool.vercel.app")
+        self.assertEqual(env["CLIENT_IP_HEADER"], "cf-connecting-ip")
+        self.assertEqual(env["ENABLE_API_DOCS"], "false")
+        self.assertNotIn("HOME_RELAY_KEY", env)
 
 
 class YoutubeUrlTests(unittest.TestCase):
