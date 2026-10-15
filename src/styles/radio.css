@@ -1,0 +1,8 @@
+/* Radio 4EVER status */
+.radio-status-chip{display:inline-block;margin-right:.45rem;padding:1px 6px;border:1px solid currentColor;border-radius:3px;font-weight:800;letter-spacing:.12em}
+.radio-status-playing .radio-status-chip{background:var(--accent);border-color:var(--accent);color:var(--on-accent,#0b0b0b)}
+.radio-status-skipping .radio-status-chip,.radio-status-unavailable .radio-status-chip{border-style:dashed}
+.track-meta.is-pending strong{animation:radio-pending .9s ease-in-out infinite alternate}
+@keyframes radio-pending{from{opacity:.95}to{opacity:.45}}
+.fake-wave.is-idle i{animation-play-state:paused;opacity:.35}
+@media (prefers-reduced-motion:reduce){.track-meta.is-pending strong{animation:none;opacity:.7}}

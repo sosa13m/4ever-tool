@@ -1,0 +1,17 @@
+node_modules/
+dist/
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
+.env
+backend/.venv/
+backend/storage/
+__pycache__/
+*.pyc
+verificacion-log.txt
+backend/e2e-server.log
+backend/e2e-youtube.mp3
+bpm-benchmark.csv
+4evertools-release.zip
+.vercel/
+logos-sin-uso-respaldo.zip

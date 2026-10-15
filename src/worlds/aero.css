@@ -1,0 +1,178 @@
+/* =========================================================================
+   4EVER AERO (secret) · Frutiger Aero / liquid glass
+   Palette: sky #5cc8ff → #c8f1ff → #e9fbff · grass #9be86a → #2c7f1d
+            aqua gel #0b72b9 (gloss on top) · leaf gel #23801a · navy text #08354f
+   Type:    Segoe UI → Nunito Sans (humanist, rounded, friendly)
+   ========================================================================= */
+
+.theme-secret-true{--ae-navy:#08354f;--ae-blue:#0b72b9;--ae-blue-text:#0a5f9e;--ae-green:#23801a;
+  --ae-glass:linear-gradient(180deg,#ffffffd9 0,#ffffff9e 48%,#ffffff7a 52%,#ffffffa6 100%);
+  --ae-gloss:inset 0 1px 0 #fff,inset 0 14px 12px -8px #ffffff8c;
+  color:var(--ae-navy);font-family:'Segoe UI','Nunito Sans','Helvetica Neue',Arial,sans-serif;background:#c8f1ff}
+.theme-secret-true::before{background:#c8f1ff!important}
+.theme-secret-true ::selection{background:var(--ae-blue);color:#fff}
+.theme-secret-true :is(.floating-stickers,.maximal-world,.ambient,.scanlines,.noise){display:none}
+
+/* ---------- world: sky, sun, clouds, ribbons, hills, bubbles ---------- */
+.aero-glass-world{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden}
+.ae-sky{position:absolute;inset:0;background:linear-gradient(180deg,#3db8f5 0,#7fd3fb 30%,#c8f1ff 62%,#e9fbff 78%)}
+.ae-sun{position:absolute;right:12%;top:6%;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,#fffef2 0 12%,#fff8c866 26%,transparent 62%);filter:blur(2px)}
+.ae-sun::after{content:'';position:absolute;left:-180%;top:48%;width:460%;height:2px;background:linear-gradient(90deg,transparent,#ffffffb3,transparent);transform:rotate(-14deg)}
+.ae-cloud{position:absolute;height:9vw;max-height:140px;border-radius:999px;background:radial-gradient(ellipse at 50% 60%,#fff 0 40%,#ffffff00 70%);filter:blur(6px);opacity:.85;animation:ae-cloud 90s linear infinite}
+@keyframes ae-cloud{from{transform:translateX(-8vw)}to{transform:translateX(18vw)}}
+.ae-ribbons{position:absolute;inset:0;width:100%;height:100%;filter:blur(1.5px);opacity:.75;mix-blend-mode:screen}
+.ae-hills{position:absolute;left:0;right:0;bottom:0;width:100%;height:30vh;min-height:180px}
+.ae-bubbles i{position:absolute;bottom:-120px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#fff 0 9%,#ffffff8c 14%,#bff0ff33 42%,#7fd3fb22 64%,#ffffffb3 72%,transparent 74%);box-shadow:inset -4px -6px 12px #ffffff66;animation:ae-rise 24s linear infinite}
+@keyframes ae-rise{0%{transform:translate(0,0);opacity:0}8%{opacity:.95}100%{transform:translate(4vw,-120vh);opacity:.4}}
+.theme-secret-true:has(.shell) .ae-bubbles{opacity:.55}
+
+/* ---------- shared glass ---------- */
+.theme-secret-true :is(.tool-card,.local-player,.conversion-console,.analysis-console,.preload-console,.theme-passport,.poster-main,.identity-strip,.ae-weather,.ae-clock){
+  background:var(--ae-glass);color:var(--ae-navy);border:1px solid #ffffffe6;border-radius:18px;
+  box-shadow:var(--ae-gloss),0 12px 34px #0a5c8a33;-webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4)}
+
+/* ---------- header: glass bar ---------- */
+.theme-secret-true .header{background:linear-gradient(180deg,#ffffffd9,#ffffff99);border-bottom:1px solid #ffffff;box-shadow:0 6px 24px #0a5c8a26,inset 0 -1px 0 #9fd8f5;-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5)}
+.theme-secret-true .brand-button img{filter:drop-shadow(0 4px 8px #0a5c8a40)}
+.theme-secret-true .desktop-nav button{font:700 .86rem/1 'Segoe UI','Nunito Sans',sans-serif;letter-spacing:.01em;color:var(--ae-navy);text-transform:none;border-radius:999px;padding:.6rem 1rem}
+.theme-secret-true .desktop-nav button:hover{background:#ffffffb3;box-shadow:var(--ae-gloss),0 0 0 1px #9fd8f5}
+.theme-secret-true .desktop-nav button.active{background:var(--ae-blue);color:#fff;box-shadow:var(--ae-gloss),0 2px 8px #0b72b955;text-shadow:0 1px 1px #03406b}
+.theme-secret-true .theme-badge{background:#ffffffb3;color:var(--ae-navy);border:1px solid #fff;border-radius:999px;box-shadow:var(--ae-gloss);font:700 .74rem/1 'Segoe UI','Nunito Sans',sans-serif}
+.theme-secret-true .theme-badge i{background:#3fbf2a;border-radius:50%;box-shadow:0 0 6px #3fbf2a}
+.theme-secret-true .icon-button{background:#ffffffb3;color:var(--ae-navy);border:1px solid #fff;border-radius:50%;box-shadow:var(--ae-gloss),0 2px 8px #0a5c8a26}
+.theme-secret-true .icon-button:hover{background:var(--ae-blue);color:#fff}
+
+/* ---------- type ---------- */
+.theme-secret-true :is(.gate h1,.hero h1,.tool-heading h2,.lab-teaser h2,.drawer-head h2){font-family:'Segoe UI','Nunito Sans',sans-serif;font-weight:800;letter-spacing:-.025em;text-transform:none;text-shadow:0 2px 0 #ffffffb3,0 0 24px #ffffff}
+
+/* ---------- gate: welcome screen ---------- */
+.theme-secret-true .gate{background:transparent;color:var(--ae-navy)}
+.theme-secret-true .gate-logo{max-height:180px;filter:drop-shadow(0 10px 18px #0a5c8a40)}
+.theme-secret-true .gate .eyebrow{display:inline-block;padding:.45rem 1rem;background:#ffffffb3;border:1px solid #fff;border-radius:999px;color:var(--ae-navy);font:700 .78rem/1 'Segoe UI','Nunito Sans',sans-serif;letter-spacing:.06em;box-shadow:var(--ae-gloss)}
+.theme-secret-true .gate h1{font-size:clamp(3rem,7.6vw,6.6rem);line-height:1;color:var(--ae-navy)}
+.theme-secret-true .gate-subline{color:#123f5a;font:500 1.05rem/1.55 'Segoe UI','Nunito Sans',sans-serif}
+.theme-secret-true .preload-console{padding:16px 20px}
+.theme-secret-true .preload-console :is(span,strong){color:var(--ae-navy)}
+.theme-secret-true :is(.analysis-progress,.preload-line){height:12px;background:#ffffffb3;border:1px solid #9fd8f5;border-radius:999px;box-shadow:inset 0 1px 3px #0a5c8a33}
+.theme-secret-true :is(.analysis-progress,.preload-line) i{background:linear-gradient(180deg,#a8f07a,#3fbf2a 55%,#2c9a1d);border-radius:999px;box-shadow:inset 0 1px 0 #ffffffb3}
+.theme-secret-true .gate .text-button{color:var(--ae-navy);font:700 .95rem/1 'Segoe UI','Nunito Sans',sans-serif;text-decoration:underline;text-underline-offset:4px}
+.theme-secret-true .theme-peek{color:var(--ae-navy)}
+.theme-secret-true .gate-note{color:#123f5a;opacity:1;background:#ffffffc7;padding:4px 12px;border-radius:999px}
+.theme-secret-true .theme-peek{opacity:1;background:#ffffffb3;border-radius:999px;padding:.4rem .8rem}
+.theme-secret-true .gate-note b{background:var(--ae-blue);color:#fff;padding:1px 6px;border-radius:999px}
+
+/* ---------- buttons: aqua and leaf gel ---------- */
+.theme-secret-true :is(.sticker-button,.massive-action,.player-button,.tool-tabs button,.option button,.converter-source-tabs button,.bpm-range button,.paste-button,.identity-strip button,.lab-open){
+  font:700 .92rem/1 'Segoe UI','Nunito Sans',sans-serif;letter-spacing:.01em;text-transform:none;border-radius:999px;transform:none}
+.theme-secret-true :is(.sticker-button.primary,.massive-action,.player-button){background:var(--ae-blue);color:#fff;border:1px solid #075a93;text-shadow:0 1px 1px #03406b;box-shadow:var(--ae-gloss),0 4px 12px #0b72b955}
+.theme-secret-true :is(.sticker-button.primary,.massive-action):hover:not(:disabled){background:#0d80cf;transform:none}
+.theme-secret-true .massive-action:disabled{background:#8fb3c9;border-color:#7aa3bb;color:#f4fbff;text-shadow:none}
+.theme-secret-true .sticker-button.ghost{background:var(--ae-green);color:#fff;border:1px solid #1a6a13;text-shadow:0 1px 1px #0e4a09;box-shadow:var(--ae-gloss),0 4px 12px #23801a55}
+.theme-secret-true :is(.tool-tabs button,.option button,.converter-source-tabs button,.bpm-range button,.paste-button){background:#ffffffc7;color:var(--ae-navy);border:1px solid #fff;box-shadow:var(--ae-gloss),0 1px 4px #0a5c8a26}
+.theme-secret-true :is(.tool-tabs button.active,.option button.selected,.converter-source-tabs button.active,.bpm-range button.selected){background:var(--ae-blue);color:#fff;border-color:#075a93;text-shadow:0 1px 1px #03406b}
+.theme-secret-true :is(.tool-tabs button,.option button,.converter-source-tabs button,.bpm-range button):hover:not(:disabled):not(.active):not(.selected){background:#fff}
+.theme-secret-true .option button:disabled{opacity:.45}
+.theme-secret-true .text-button{color:var(--ae-navy)}
+
+/* ---------- hero ---------- */
+.theme-secret-true .hero::before{content:'everything is connected';font:600 .8rem/1 'Segoe UI','Nunito Sans',sans-serif;letter-spacing:.2em;color:#0a5f9e;opacity:.6}
+.theme-secret-true .tape{display:inline-block;background:#ffffffb3;color:var(--ae-navy);border:1px solid #fff;border-radius:999px;box-shadow:var(--ae-gloss);transform:none;font:700 .72rem/1 'Segoe UI','Nunito Sans',sans-serif;letter-spacing:.08em;padding:.5rem .9rem}
+.theme-secret-true .hero h1{font-size:clamp(3.2rem,7vw,6.8rem);line-height:1;color:var(--ae-navy)}
+.theme-secret-true .hero h1 span{color:var(--ae-blue-text);-webkit-text-stroke:0;text-shadow:0 2px 0 #ffffffb3,0 0 24px #fff}
+.theme-secret-true .hero-copy>p{color:#123f5a;max-width:540px;font:500 1.02rem/1.6 'Segoe UI','Nunito Sans',sans-serif}
+.theme-secret-true .theme-passport{transform:none}
+.theme-secret-true .theme-passport span{color:#2a5a75}
+.theme-secret-true .theme-passport strong{font-family:'Segoe UI','Nunito Sans',sans-serif;font-weight:800;color:var(--ae-blue-text)}
+.theme-secret-true .theme-passport em{color:#2a5a75}
+.theme-secret-true .hero-art{min-height:500px;transform:none!important}
+.theme-secret-true .poster{border:0}
+.theme-secret-true .poster-main{inset:6% 4% 8%;transform:none;justify-content:center;gap:1.2rem;padding:2.2rem 2rem 5rem;overflow:hidden;border-radius:26px}
+.theme-secret-true .poster-main img{max-width:88%;filter:drop-shadow(0 10px 16px #0a5c8a40)}
+.theme-secret-true .poster-main strong{font:800 clamp(1.3rem,2.2vw,2rem)/1.1 'Segoe UI','Nunito Sans',sans-serif;color:var(--ae-navy)}
+.theme-secret-true .poster-main::after{content:'Everything is connected.';position:absolute;left:14px;right:14px;bottom:14px;padding:.85rem 1.2rem;border-radius:999px;background:var(--ae-blue);color:#fff;font:700 1rem/1 'Segoe UI','Nunito Sans',sans-serif;text-shadow:0 1px 1px #03406b;box-shadow:var(--ae-gloss),0 4px 12px #0b72b955;text-align:center}
+.theme-secret-true :is(.poster-small,.sticker-round,.barcode){display:none}
+
+.ae-gadgets{display:none}
+.theme-secret-true .ae-gadgets{display:flex;gap:14px;margin:1.4rem 0 1.2rem}
+.ae-clock{width:132px;height:132px;padding:10px;border-radius:50%!important}
+.ae-clock svg{width:100%;height:100%}
+.ae-face{fill:#ffffffb3;stroke:#9fd8f5;stroke-width:1.5}
+.ae-tick{stroke:#2a5a75;stroke-width:2;stroke-linecap:round}
+.ae-hand-h{stroke:var(--ae-navy);stroke-width:4;stroke-linecap:round}
+.ae-hand-m{stroke:var(--ae-navy);stroke-width:2.6;stroke-linecap:round}
+.ae-hand-s{stroke:#e8502e;stroke-width:1.4;stroke-linecap:round}
+.ae-pin{fill:var(--ae-blue);stroke:#fff;stroke-width:1}
+.ae-weather{position:relative;display:grid;align-content:center;gap:2px;min-width:170px;padding:14px 18px 14px 78px}
+.ae-weather strong{font:800 2rem/1 'Segoe UI','Nunito Sans',sans-serif;color:var(--ae-navy)}
+.ae-weather span{font:600 .95rem/1.2 'Segoe UI','Nunito Sans',sans-serif;color:#123f5a}
+.ae-weather small{font:700 .66rem/1.2 'Segoe UI','Nunito Sans',sans-serif;letter-spacing:.08em;color:#2a5a75}
+.ae-weather-icon{position:absolute;left:14px;top:50%;width:52px;height:52px;transform:translateY(-50%)}
+.ae-weather-icon i{position:absolute;left:4px;top:2px;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff7b0,#ffcf3a 60%,#f2a20c);box-shadow:0 0 14px #ffd84a}
+.ae-weather-icon b{position:absolute;right:0;bottom:6px;width:38px;height:20px;border-radius:999px;background:linear-gradient(180deg,#fff,#dff3ff);box-shadow:-10px -6px 0 -2px #fff,0 3px 6px #0a5c8a33}
+
+/* ---------- identity strip ---------- */
+.theme-secret-true .identity-strip>*{border-color:#9fd8f566}
+.theme-secret-true .identity-strip::after{content:'liquid glass · clean audio ·';color:#0a5f9e;opacity:.7}
+.theme-secret-true .identity-strip>span{color:var(--ae-navy)!important}
+.theme-secret-true .identity-strip button{background:var(--ae-blue);color:#fff;border:1px solid #075a93;text-shadow:0 1px 1px #03406b;box-shadow:var(--ae-gloss)}
+
+/* ---------- tools: glass panes ---------- */
+.theme-secret-true .tool-stage{background:transparent;border:0}
+.theme-secret-true .tool-stage::before{content:'4EVER VISTA · TOOLS';font-family:'Segoe UI','Nunito Sans',sans-serif;font-weight:700;color:#0a5f9e;opacity:.6}
+.theme-secret-true :is(.tool-card,.local-player,.conversion-console,.analysis-console){border-radius:22px}
+.theme-secret-true .tool-card::before{color:#0a5f9e;opacity:.06;font-family:'Segoe UI','Nunito Sans',sans-serif;font-weight:800}
+.theme-secret-true .tool-heading>span{background:linear-gradient(180deg,#a8f07a,#3fbf2a 55%,#2c9a1d);color:#06300a;border-radius:999px;border:1px solid #fff;box-shadow:var(--ae-gloss)}
+.theme-secret-true .tool-heading p{color:#2a5a75;font:700 .78rem/1.3 'Segoe UI','Nunito Sans',sans-serif;letter-spacing:.08em}
+.theme-secret-true .tool-heading h2{font-size:clamp(2.4rem,4.8vw,4.2rem);color:var(--ae-navy)}
+.theme-secret-true :is(.url-field>span,.option>span){font:700 .8rem/1 'Segoe UI','Nunito Sans',sans-serif;letter-spacing:.04em;color:#123f5a;text-transform:none}
+.theme-secret-true .url-field input,.theme-secret-true :is(.lab-selection input,.lab-target input){background:#fff;color:var(--ae-navy);border:1px solid #8cc6e6;border-radius:10px;box-shadow:inset 0 2px 4px #0a5c8a26;font:500 1rem 'Segoe UI','Nunito Sans',sans-serif}
+.theme-secret-true input::placeholder{color:#5d7f93}
+.theme-secret-true .url-field input:focus{outline:0;border-color:#2bb7f0;box-shadow:inset 0 2px 4px #0a5c8a26,0 0 0 3px #2bb7f066}
+.theme-secret-true .option{background:#ffffff80;border:1px solid #ffffff;border-radius:16px;box-shadow:inset 0 1px 0 #fff}
+.theme-secret-true :is(.converter-file-zone,.drop-zone){background:#ffffff8c;border:2px dashed #6fb9e0;border-radius:18px;color:var(--ae-navy);box-shadow:none}
+.theme-secret-true :is(.converter-file-zone,.drop-zone):hover{background:#ffffffcc;border-color:var(--ae-blue)}
+.theme-secret-true .drop-zone strong{font-family:'Segoe UI','Nunito Sans',sans-serif;font-weight:800}
+.theme-secret-true .source-badge{background:#ffffffcc;color:var(--ae-navy);border:1px solid #fff;border-radius:999px}
+.theme-secret-true .conversion-result{background:#ffffffb3;border:1px solid #fff;border-left:6px solid #3fbf2a;border-radius:16px;color:var(--ae-navy)}
+.theme-secret-true .results-grid .metric{background:#ffffffb3;color:var(--ae-navy);border:1px solid #fff;border-radius:16px;box-shadow:var(--ae-gloss)}
+.theme-secret-true .results-grid .metric strong{font-family:'Segoe UI','Nunito Sans',sans-serif;font-weight:800;color:var(--ae-blue-text)}
+.theme-secret-true .results-grid .metric span{color:#2a5a75}
+.theme-secret-true .alternative-keys{border:1px solid #9fd8f5;border-radius:14px}
+.theme-secret-true .tool-card :is(.legal-copy,.prototype-tag){color:#2a5a75;opacity:1}
+.theme-secret-true .tool-card .prototype-tag{border:1px solid #8cc6e6;border-radius:999px}
+.theme-secret-true .lab-forecast{--lab-cell:#ffffffcc;border-radius:14px;overflow:hidden}
+.theme-secret-true .lab-forecast>div{color:var(--ae-navy)}
+.theme-secret-true .conversion-history{border-color:#9fd8f5;border-radius:16px}
+.theme-secret-true :is(.lab-slider,.volume-slider){accent-color:#0b72b9}
+
+/* ---------- LAB teaser: leaf glass ---------- */
+.theme-secret-true .lab-teaser{background:linear-gradient(180deg,#d9ffbfe6 0,#a8f07acc 50%,#7fdc4fcc 52%,#a8f07ae6 100%);color:#0b3a10;border:1px solid #fff;border-radius:26px;padding:3rem 1.5rem;box-shadow:var(--ae-gloss),0 14px 40px #2c7f1d40;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.theme-secret-true .lab-teaser::before{content:'new room';color:#0b3a10;opacity:.7;font-family:'Segoe UI','Nunito Sans',sans-serif}
+.theme-secret-true .lab-teaser>span{color:#0b3a10;font-weight:700}
+.theme-secret-true .lab-teaser h2{font-size:clamp(3rem,8vw,6.6rem);color:#0b3a10}
+.theme-secret-true .lab-teaser .lab-open{background:var(--ae-blue);color:#fff;border:1px solid #075a93;text-shadow:0 1px 1px #03406b;box-shadow:var(--ae-gloss),0 4px 12px #0b72b955}
+.theme-secret-true .tool-cloud{color:#0b3a10}
+
+/* ---------- radio: dark glass taskbar; drawers ---------- */
+.theme-secret-true .radio-bar{background:linear-gradient(180deg,#3b6585e6 0,#16344ef2 50%,#0b2235f5 51%,#14324df2 100%);color:#fff;border-top:1px solid #9fd8f5aa;box-shadow:inset 0 1px 0 #ffffff4d,0 -6px 20px #0a5c8a33;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.theme-secret-true .radio-bar .player-button{border-radius:50%;background:radial-gradient(circle at 50% 30%,#7fd3fb,#0b72b9 60%,#064a7a);border:1px solid #9fd8f5}
+.theme-secret-true .radio-status-chip{border-radius:999px;background:#fff;color:var(--ae-navy)}
+.theme-secret-true .track-meta strong{font-family:'Segoe UI','Nunito Sans',sans-serif;font-weight:800}
+.theme-secret-true .track-meta span{color:#d5ecf8;opacity:1}
+.theme-secret-true .radio-bar .icon-button{background:#ffffff1f;color:#fff;border-color:#ffffff4d}
+.theme-secret-true :is(.drawer,.theme-drawer,.crew-drawer,.mobile-nav-sheet){background:linear-gradient(180deg,#f2fbffef,#dff4ffef);color:var(--ae-navy);border-left:1px solid #fff;box-shadow:-10px 0 40px #0a5c8a40;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+.theme-secret-true .drawer-head span{color:#2a5a75}
+.theme-secret-true .crew-card-rich{background:#ffffffb3;color:var(--ae-navy);border:1px solid #fff;border-radius:16px;box-shadow:var(--ae-gloss)}
+.theme-secret-true :is(.crew-filters button,.crew-card-actions button,.crew-card-actions a){border-radius:999px}
+.theme-secret-true .crew-manifesto{background:var(--ae-blue);color:#fff;border:0;border-radius:16px}
+.theme-secret-true .crew-manifesto p{opacity:1}
+
+@media(max-width:860px){
+  .theme-secret-true .hero-art{min-height:360px}
+  .theme-secret-true .poster-main{inset:4%}
+  .ae-sun{width:160px;height:160px}
+  .ae-clock{width:104px;height:104px}
+  .ae-weather{min-width:0;padding-left:70px}
+}
+/* Reduced motion: freeze clouds and bubbles mid-flight (their negative delays spread them out). */
+@media(prefers-reduced-motion:reduce){.ae-cloud,.ae-bubbles i{animation-play-state:paused}}

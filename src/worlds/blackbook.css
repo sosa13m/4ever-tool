@@ -1,0 +1,183 @@
+/* =========================================================================
+   4EVER WHITE BLACKBOOK · the sketchbook
+   Palette: cover #0c0c0c / #161616 · page #f4f1e9 / #e9e5da · graphite #5b5b5b
+            marker ink #111 · white paint #fff (strictly black & white)
+   Type:    Permanent Marker (tags, headlines) · Caveat (handwriting) · Archivo (UI)
+   ========================================================================= */
+
+.theme-blackbook{--bk-page:#f4f1e9;--bk-page-2:#e9e5da;--bk-ink:#111;--bk-graphite:#4f4f4f;
+  --bk-dots:radial-gradient(circle,#1111112e 1px,transparent 1.6px) 0 0/22px 22px;
+  --bk-hand:255px 15px 225px 15px/15px 225px 15px 255px;
+  color:#fff;font-family:'Archivo','Helvetica Neue',Arial,sans-serif;background:#0c0c0c}
+.theme-blackbook::before{background:#0c0c0c!important}
+.theme-blackbook ::selection{background:#fff;color:#000}
+.theme-blackbook :is(.floating-stickers,.maximal-world,.ambient,.scanlines){display:none}
+.theme-blackbook .noise{opacity:.1;mix-blend-mode:screen}
+
+/* ---------- world: the cover ---------- */
+.blackbook-cover-world{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden;background:#0c0c0c}
+.bk-grain{position:absolute;inset:0;background:
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='l'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .22 -.06'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23l)'/%3E%3C/svg%3E"),
+  radial-gradient(ellipse at 30% 20%,#1d1d1d,transparent 60%),radial-gradient(ellipse at 80% 90%,#181818,transparent 50%)}
+.bk-drips{position:absolute;left:0;right:0;top:0;width:100%;height:120px;opacity:.9}
+.bk-drips path{fill:#fff}
+.bk-doodle{position:absolute;fill:none;stroke:#fff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;opacity:.42}
+.bk-crown{left:4vw;top:24vh;width:clamp(80px,8vw,130px);transform:rotate(-12deg)}
+.bk-star{right:6vw;top:30vh;width:clamp(70px,6vw,110px);transform:rotate(14deg)}
+.bk-arrow{left:6vw;bottom:14vh;width:clamp(140px,14vw,230px);transform:rotate(-6deg)}
+.bk-throw{right:4vw;bottom:10vh;width:clamp(160px,17vw,280px);transform:rotate(-4deg)}
+.bk-throw path:first-child{fill:#ffffff10}
+.bk-crown circle{fill:#fff;stroke:none}
+.bk-strap{position:absolute;top:0;bottom:0;right:2.4vw;width:14px;background:linear-gradient(90deg,#050505,#1e1e1e 40%,#0a0a0a);box-shadow:-2px 0 6px #0008,2px 0 6px #0008}
+.bk-label{position:absolute;left:3vw;bottom:3.4vh;transform:rotate(-2deg);display:grid;gap:2px;padding:8px 14px;background:var(--bk-page);color:var(--bk-ink);text-align:center;box-shadow:0 4px 0 #0006}
+.bk-label b{font:400 1rem/1 'Permanent Marker','Comic Sans MS',cursive}
+.bk-label span{font:600 .9rem/1 'Caveat',cursive}
+.theme-blackbook:has(.shell) :is(.bk-doodle,.bk-label){opacity:.18}
+.theme-blackbook:has(.shell) .bk-drips{opacity:.5}
+
+/* ---------- header: white drips under the black bar ---------- */
+.theme-blackbook .header{background:#0c0c0cf5;border-bottom:3px solid #fff;box-shadow:none;backdrop-filter:none}
+.theme-blackbook .brand-button img{filter:drop-shadow(2px 3px 0 #000)}
+.theme-blackbook .desktop-nav button{white-space:nowrap;font:400 .92rem/1 'Permanent Marker','Comic Sans MS',cursive;letter-spacing:.02em;color:#fff;text-transform:uppercase;border-radius:0;padding:.55rem .8rem}
+.theme-blackbook .desktop-nav button:hover{background:#ffffff14}
+.theme-blackbook .desktop-nav button.active{background:none;color:#fff;text-decoration:underline wavy #fff 2px;text-underline-offset:8px}
+.theme-blackbook .theme-badge{background:var(--bk-page);color:var(--bk-ink);border:0;border-radius:var(--bk-hand);font:700 .9rem/1 'Caveat',cursive}
+.theme-blackbook .theme-badge i{background:var(--bk-ink);border-radius:50%}
+.theme-blackbook .icon-button{background:#0c0c0c;color:#fff;border:2px solid #fff;border-radius:var(--bk-hand)}
+.theme-blackbook .icon-button:hover{background:#fff;color:#000}
+
+/* ---------- type ---------- */
+.theme-blackbook :is(.gate h1,.hero h1,.tool-heading h2,.lab-teaser h2,.drawer-head h2){font-family:'Permanent Marker','Comic Sans MS',cursive;font-weight:400;letter-spacing:.01em;text-transform:uppercase;text-shadow:none}
+
+/* ---------- gate: the cover, a page taped inside ---------- */
+.theme-blackbook .gate{background:transparent;color:#fff}
+.theme-blackbook .gate-logo{max-height:190px;filter:drop-shadow(4px 5px 0 #000)}
+.theme-blackbook .gate .eyebrow{display:inline-block;padding:.35rem .8rem;background:#fff;color:#000;border-radius:var(--bk-hand);font:700 1.1rem/1 'Caveat',cursive;letter-spacing:.02em;transform:rotate(-1.5deg)}
+.theme-blackbook .gate h1{font-size:clamp(3rem,7vw,6.4rem);line-height:.95;color:#fff;transform:rotate(-1.5deg)}
+.theme-blackbook .gate-subline{color:#e8e8e8;font:600 1.35rem/1.35 'Caveat',cursive}
+.theme-blackbook .preload-console{position:relative;background:var(--bk-dots),var(--bk-page);color:var(--bk-ink);border:0;border-radius:2px;padding:20px 22px;transform:rotate(.6deg);box-shadow:0 18px 40px #000c}
+.theme-blackbook .preload-console::before{content:'';position:absolute;left:50%;top:-12px;width:120px;height:26px;background:#ffffffb3;transform:translateX(-50%) rotate(-3deg);box-shadow:0 1px 2px #0003}
+.theme-blackbook .preload-console :is(span,strong){color:var(--bk-ink);font-family:'Caveat',cursive;font-size:1.15rem;font-weight:700}
+.theme-blackbook :is(.analysis-progress,.preload-line){background:transparent;border:2px solid var(--bk-ink);border-radius:var(--bk-hand);height:12px}
+.theme-blackbook :is(.analysis-progress,.preload-line) i{background:repeating-linear-gradient(-45deg,var(--bk-ink) 0 3px,transparent 3px 7px);border-radius:var(--bk-hand)}
+.theme-blackbook .gate .text-button{color:#fff;font:400 1.05rem/1 'Permanent Marker',cursive;text-decoration:underline wavy #fff 2px;text-underline-offset:7px}
+.theme-blackbook .theme-peek{color:#fff;font:700 1.2rem/1 'Caveat',cursive}
+.theme-blackbook .gate-note{color:#e8e8e8}
+.theme-blackbook .gate-note b{background:#fff;color:#000;padding:1px 5px}
+
+/* ---------- buttons: paint strokes and marker outlines ---------- */
+.theme-blackbook :is(.sticker-button,.massive-action,.player-button,.tool-tabs button,.option button,.converter-source-tabs button,.bpm-range button,.paste-button,.identity-strip button,.lab-open){
+  font:400 1rem/1 'Permanent Marker','Comic Sans MS',cursive;letter-spacing:.03em;text-transform:uppercase;border-radius:var(--bk-hand);transform:none;box-shadow:none}
+.theme-blackbook :is(.sticker-button.primary,.massive-action,.player-button){background:#fff;color:#000;border:3px solid #fff}
+.theme-blackbook :is(.sticker-button.primary,.massive-action):hover:not(:disabled){background:#e6e6e6;transform:rotate(-1deg)}
+.theme-blackbook .massive-action:disabled{background:#cfcfcf;color:#333;border-color:#cfcfcf}
+.theme-blackbook .sticker-button.ghost{background:transparent;color:#fff;border:3px solid #fff}
+.theme-blackbook :is(.tool-tabs button,.option button,.converter-source-tabs button,.bpm-range button,.paste-button){background:transparent;color:var(--bk-ink);border:2px solid var(--bk-ink)}
+.theme-blackbook .tool-tabs button{color:#fff;border-color:#fff}
+.theme-blackbook :is(.tool-tabs button.active,.option button.selected,.converter-source-tabs button.active,.bpm-range button.selected){background:var(--bk-ink);color:#fff;border-color:var(--bk-ink)}
+.theme-blackbook .tool-tabs button.active{background:#fff;color:#000;border-color:#fff}
+.theme-blackbook :is(.option button,.converter-source-tabs button,.bpm-range button,.paste-button):hover:not(:disabled):not(.active):not(.selected){background:#1111110f}
+.theme-blackbook .tool-tabs button:hover:not(.active){background:#ffffff14}
+.theme-blackbook .option button:disabled{opacity:.4}
+.theme-blackbook .text-button{color:inherit}
+
+/* ---------- hero: the cover with a sticker and a to-do page ---------- */
+.theme-blackbook .hero::before{content:'BLACK INK · WHITE PAINT';font:400 .8rem/1 'Permanent Marker',cursive;letter-spacing:.14em;color:#ffffff73;opacity:1}
+.theme-blackbook .tape{display:inline-block;background:#ffffffd9;color:#000;border:0;border-radius:0;box-shadow:0 2px 3px #0006;transform:rotate(-2deg);font:700 1.05rem/1 'Caveat',cursive;padding:.4rem .9rem}
+.theme-blackbook .hero h1{font-size:clamp(3.4rem,7.4vw,7.4rem);line-height:.98;color:#fff}
+.theme-blackbook .hero h1 span{color:#0c0c0c;-webkit-text-stroke:0;text-shadow:none;background:#fff;padding:0 .14em;border-radius:var(--bk-hand);-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.theme-blackbook .hero-copy>p{color:#e8e8e8;max-width:540px;font:600 1.3rem/1.35 'Caveat',cursive}
+.theme-blackbook .theme-passport{background:var(--bk-page);color:var(--bk-ink);border:0;border-radius:var(--bk-hand);transform:rotate(-1deg);box-shadow:0 4px 0 #0008}
+.theme-blackbook .theme-passport span{color:var(--bk-graphite);font-family:'Caveat',cursive;font-size:1rem;font-weight:700}
+.theme-blackbook .theme-passport strong{font-family:'Permanent Marker',cursive;font-weight:400;color:var(--bk-ink)}
+.theme-blackbook .theme-passport em{color:var(--bk-graphite)}
+.theme-blackbook .hero-art{min-height:540px;transform:none!important}
+.theme-blackbook .poster{border:0;box-shadow:none}
+.theme-blackbook .poster-main{inset:4% 4% 6%;transform:rotate(-1.2deg);background:var(--bk-dots),var(--bk-page);color:var(--bk-ink);border:0;border-radius:2px;justify-content:center;gap:1.4rem;padding:2.6rem 2rem 2.6rem 3.6rem;box-shadow:0 30px 60px #000d;overflow:visible}
+.theme-blackbook .poster-main::before{content:'';position:absolute;left:10px;top:12px;bottom:12px;width:18px;background:radial-gradient(circle at 50% 50%,#0c0c0c 0 5px,transparent 5.5px) 0 0/18px 26px}
+.theme-blackbook .poster-main img{max-width:78%;padding:22px 26px;background:#111;border-radius:6px;transform:rotate(2deg);box-shadow:3px 4px 0 #0005}
+.theme-blackbook .poster-main strong{font:400 clamp(1.5rem,2.6vw,2.4rem)/1.05 'Permanent Marker',cursive;color:var(--bk-ink);text-transform:uppercase}
+.theme-blackbook .poster-main::after{content:'pg. 134 — all city';position:absolute;right:1.6rem;bottom:1rem;font:700 1.3rem/1 'Caveat',cursive;color:var(--bk-graphite)}
+.theme-blackbook :is(.poster-small,.sticker-round,.barcode){display:none}
+
+.bk-todo{display:none}
+.theme-blackbook .bk-todo{position:relative;display:block;margin:1.6rem 0 1.4rem;max-width:420px;padding:18px 22px 16px;background:repeating-linear-gradient(180deg,transparent 0 33px,#9fb3c6 33px 34px) 0 52px/100% calc(100% - 52px) no-repeat,var(--bk-page);color:var(--bk-ink);transform:rotate(-1.5deg);box-shadow:0 14px 30px #000b;
+  clip-path:polygon(0 2%,6% 0,14% 1.5%,23% .2%,33% 1.8%,42% .4%,53% 1.6%,64% .2%,73% 1.4%,84% .3%,93% 1.7%,100% .4%,100% 100%,0 100%)}
+.bk-todo strong{display:block;margin-bottom:6px;font:400 1.4rem/1 'Permanent Marker',cursive}
+.bk-todo ul{list-style:none;margin:0;padding:0}
+.bk-todo li{min-height:34px;display:flex;align-items:flex-end}
+.bk-todo button{display:flex;align-items:center;gap:10px;width:100%;padding:0 0 3px;border:0;background:none;color:var(--bk-ink);font:700 1.4rem/1.15 'Caveat',cursive;text-align:left;cursor:pointer}
+.bk-todo button i{display:grid;place-items:center;flex:none;width:20px;height:20px;border:2px solid var(--bk-ink);border-radius:3px 6px 4px 5px;font:400 1rem/1 'Permanent Marker',cursive;font-style:normal}
+.bk-todo button.done{text-decoration:line-through 3px;color:#4f4f4f}
+.bk-todo button:hover{text-decoration:underline wavy}
+.bk-todo button:focus-visible{outline:2px dashed var(--bk-ink);outline-offset:2px}
+
+/* ---------- identity strip ---------- */
+.theme-blackbook .identity-strip{background:#fff;color:#000;border:0;border-radius:var(--bk-hand);box-shadow:none;font-family:'Caveat',cursive;font-size:1.1rem;font-weight:700}
+.theme-blackbook .identity-strip::after{content:'do not paint over · do not paint over ·';color:#ffffffa6;opacity:1;font-family:'Caveat',cursive;font-size:.9rem}
+.theme-blackbook .identity-strip>*{border-color:#0000001f}
+.theme-blackbook .identity-strip>span{color:#000!important}
+.theme-blackbook .identity-strip button{background:#000;color:#fff;border:0}
+
+/* ---------- tools: sketchbook pages with spiral binding ---------- */
+.theme-blackbook .tool-stage{background:transparent;border:0}
+.theme-blackbook .tool-stage::before{content:'SKETCHES · AUDIO DEPT.';font-family:'Permanent Marker',cursive;color:#ffffff73;opacity:1}
+.theme-blackbook :is(.tool-card,.local-player,.conversion-console,.analysis-console){background:var(--bk-dots),var(--bk-page);color:var(--bk-ink);border:0;border-radius:3px;box-shadow:0 30px 60px #000d}
+.theme-blackbook .tool-card{padding-left:calc(clamp(1.3rem,4vw,4rem) + 26px)}
+.theme-blackbook .tool-card::after{content:'';position:absolute;left:12px;top:16px;bottom:16px;width:18px;background:radial-gradient(circle at 50% 50%,#0c0c0c 0 5px,transparent 5.5px) 0 0/18px 28px}
+.theme-blackbook .tool-card::before{color:var(--bk-ink);opacity:.05;font-family:'Permanent Marker',cursive}
+.theme-blackbook .tool-heading>span{background:var(--bk-ink);color:#fff;border-radius:var(--bk-hand);font-family:'Permanent Marker',cursive}
+.theme-blackbook .tool-heading p{color:var(--bk-graphite);font:700 1.15rem/1.1 'Caveat',cursive}
+.theme-blackbook .tool-heading h2{font-size:clamp(2.6rem,5vw,4.6rem);color:var(--bk-ink)}
+.theme-blackbook :is(.url-field>span,.option>span){font:700 1.15rem/1 'Caveat',cursive;letter-spacing:0;color:var(--bk-ink);text-transform:none}
+.theme-blackbook .url-field input,.theme-blackbook :is(.lab-selection input,.lab-target input){background:#fff;color:var(--bk-ink);border:2px solid var(--bk-ink);border-radius:var(--bk-hand);box-shadow:none;font:500 1rem 'Archivo',sans-serif}
+.theme-blackbook input::placeholder{color:#6a6a6a}
+.theme-blackbook .url-field input:focus{outline:3px dashed var(--bk-ink);outline-offset:3px}
+.theme-blackbook .option{background:#ffffff8c;border:2px dashed #11111166;border-radius:6px}
+.theme-blackbook :is(.converter-file-zone,.drop-zone){background:#ffffff8c;border:3px dashed var(--bk-ink);border-radius:var(--bk-hand);color:var(--bk-ink);box-shadow:none}
+.theme-blackbook :is(.converter-file-zone,.drop-zone):hover{background:#fff}
+.theme-blackbook .drop-zone strong{font-family:'Permanent Marker',cursive;font-weight:400}
+.theme-blackbook .source-badge{background:var(--bk-ink);color:#fff;border:0;border-radius:var(--bk-hand)}
+.theme-blackbook .conversion-result{background:#fff;border:2px solid var(--bk-ink);border-radius:var(--bk-hand);color:var(--bk-ink)}
+.theme-blackbook .results-grid .metric{background:#fff;color:var(--bk-ink);border:2px solid var(--bk-ink);border-radius:var(--bk-hand)}
+.theme-blackbook .results-grid .metric strong{font-family:'Permanent Marker',cursive;font-weight:400;color:var(--bk-ink)}
+.theme-blackbook .results-grid .metric span{color:var(--bk-graphite)}
+.theme-blackbook .alternative-keys{border:2px dashed #11111166;border-radius:6px}
+.theme-blackbook .tool-card :is(.legal-copy,.prototype-tag){color:#3a3a3a;opacity:1}
+.theme-blackbook .tool-card .prototype-tag{border:2px solid var(--bk-ink);border-radius:var(--bk-hand)}
+.theme-blackbook .lab-forecast{--lab-cell:#fff;border-radius:6px;overflow:hidden}
+.theme-blackbook .lab-forecast>div{color:var(--bk-ink)}
+.theme-blackbook .conversion-history{border-color:#11111140;border-radius:6px}
+.theme-blackbook :is(.lab-slider,.volume-slider){accent-color:#111}
+.theme-blackbook .radio-bar .volume-slider{accent-color:#fff}
+
+/* ---------- LAB teaser: a full white-paint page ---------- */
+.theme-blackbook .lab-teaser{background:var(--bk-dots),var(--bk-page);color:var(--bk-ink);border:0;border-radius:3px;padding:3rem 1.5rem;transform:rotate(.5deg);box-shadow:0 30px 60px #000d}
+.theme-blackbook .lab-teaser::before{content:'next page →';color:var(--bk-graphite);opacity:1;font:700 1.2rem/1 'Caveat',cursive;letter-spacing:0}
+.theme-blackbook .lab-teaser>span{color:var(--bk-graphite);font:700 1.2rem/1 'Caveat',cursive}
+.theme-blackbook .lab-teaser h2{font-size:clamp(3.4rem,9vw,7.6rem);color:var(--bk-ink)}
+.theme-blackbook .lab-teaser .lab-open{background:var(--bk-ink);color:#fff;border:3px solid var(--bk-ink)}
+.theme-blackbook .tool-cloud{color:#2c2c2c;font:700 1.15rem/1.3 'Caveat',cursive}
+
+/* ---------- radio, drawers ---------- */
+.theme-blackbook .radio-bar{background:#0c0c0cf5;color:#fff;border-top:3px solid #fff}
+.theme-blackbook .radio-status-chip{border-radius:var(--bk-hand);background:#fff;color:#000}
+.theme-blackbook .track-meta strong{font-family:'Permanent Marker',cursive;font-weight:400}
+.theme-blackbook .track-meta span{color:#e0e0e0;opacity:1}
+.theme-blackbook :is(.drawer,.theme-drawer,.crew-drawer,.mobile-nav-sheet){background:#111;color:#fff;border-left:4px solid #fff}
+.theme-blackbook .drawer-head span{color:#e0e0e0}
+.theme-blackbook .crew-card-rich{background:var(--bk-dots),var(--bk-page);color:var(--bk-ink);border:0;border-radius:3px}
+.theme-blackbook :is(.crew-filters button,.crew-card-actions button,.crew-card-actions a){border-radius:var(--bk-hand)}
+.theme-blackbook .crew-manifesto{background:#fff;color:#000;border:0;border-radius:var(--bk-hand)}
+.theme-blackbook .crew-manifesto p{opacity:1}
+
+@media(max-width:860px){
+  .theme-blackbook .hero-art{min-height:380px}
+  .theme-blackbook .poster-main{inset:4%;padding-left:3rem}
+  .bk-doodle{opacity:.22}
+  .bk-arrow,.bk-crown,.bk-label{display:none}
+  .bk-strap{right:1vw;width:8px}
+  .theme-blackbook .tool-card{padding-left:calc(1.3rem + 22px)}
+  .bk-todo button{font-size:1.2rem}
+  .theme-blackbook .bk-todo{background:var(--bk-page)}
+}

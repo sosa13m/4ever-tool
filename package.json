@@ -1,0 +1,40 @@
+{
+  "name": "4evertools",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "dev": "vite",
+    "prebuild": "node scripts/fetch-avatars.mjs",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "avatars": "node scripts/fetch-avatars.mjs",
+    "typecheck": "tsc -b",
+    "test:bpm": "node scripts/bpm-selftest.ts",
+    "bench:bpm": "node scripts/bpm-benchmark.ts",
+    "bench:key": "node scripts/bpm-benchmark.ts",
+    "test:radio": "node scripts/radio-selftest.ts",
+    "test:key": "node scripts/key-selftest.ts",
+    "test:converter": "node scripts/converter-selftest.ts",
+    "test:collective": "node scripts/collective-selftest.ts",
+    "test:lab": "node scripts/lab-selftest.ts",
+    "test:sfx": "node scripts/sfx-selftest.ts",
+    "test:lore": "node scripts/lore-selftest.ts"
+  },
+  "dependencies": {
+    "framer-motion": "^12.0.0",
+    "lucide-react": "^0.511.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "^4.5.0",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
+  }
+}

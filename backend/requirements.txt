@@ -1,0 +1,9 @@
+fastapi==0.116.1
+uvicorn[standard]==0.35.0
+python-multipart==0.0.20
+httpx==0.28.1
+pydantic-settings==2.10.1
+# yt-dlp is intentionally NOT pinned to an exact version: YouTube changes
+# constantly and old yt-dlp versions stop working. Rebuild/upgrade often.
+# [default] pulls yt-dlp-ejs, needed (with Deno) to solve YouTube's JS challenges.
+yt-dlp[default]>=2025.11.12

@@ -1,0 +1,110 @@
+/* Collective Worlds */
+
+/* ---------- sigils & avatars ---------- */
+.sigil{display:block;width:100%;height:100%}
+.member-photo{display:block;width:100%;height:100%;object-fit:cover}
+
+/* ---------- crew cards ---------- */
+.crew-cover,.crew-card-copy{border:0;padding:0;margin:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.crew-cover{background:#0b0b0f}
+.crew-cover .sigil,.crew-cover .member-photo{position:absolute;inset:0;transition:transform .35s ease}
+.crew-card-rich:hover .crew-cover .sigil{transform:scale(1.06) rotate(-2deg)}
+.crew-card-copy{padding:16px 14px 8px}
+.crew-card-copy span{color:inherit;opacity:.8}
+.crew-card-copy span::before{content:'';display:inline-block;width:7px;height:7px;margin-right:6px;border-radius:50%;background:var(--member-accent);box-shadow:0 0 0 1px currentColor;vertical-align:1px}
+.crew-card-copy em{opacity:.78}
+.crew-symbol{position:absolute;right:7px;top:7px;display:grid;place-items:center;width:24px;height:24px;background:var(--member-accent);color:var(--member-ink,#080808);font:900 13px/1 system-ui,sans-serif}
+.radio-ready,.crew-card-actions button{color:var(--member-ink,#080808)}
+.crew-card-actions .crew-open-world{background:transparent;color:inherit;border:1px solid currentColor;white-space:nowrap}
+.crew-card-actions .crew-open-world:hover{background:var(--member-accent);border-color:var(--member-accent);color:var(--member-ink,#080808)}
+.crew-cover:focus-visible,.crew-card-copy:focus-visible{outline:3px solid var(--member-accent);outline-offset:-3px}
+.signals-count{font-weight:900;letter-spacing:.12em}
+
+/* ---------- radio cameo ---------- */
+.radio-cameo{flex:0 0 auto;width:40px;height:40px;padding:2px;border:2px solid var(--m1);border-radius:50%;background:linear-gradient(135deg,var(--m1),var(--m2));overflow:hidden;cursor:pointer;transition:transform .2s ease}
+.radio-cameo>*{width:100%;height:100%;border-radius:50%;overflow:hidden}
+.radio-cameo:hover{transform:scale(1.1) rotate(-6deg)}
+.radio-cameo.is-live{animation:cameo-pulse 2.4s ease-in-out infinite}
+@keyframes cameo-pulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--m1) 60%,transparent)}50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--m1) 0%,transparent)}}
+@media(max-width:560px){.radio-cameo{width:34px;height:34px}}
+
+/* ---------- signal toast ---------- */
+.member-secret-toast{display:flex;align-items:center;gap:10px;border:2px solid var(--m1)!important;cursor:pointer;font:inherit}
+.member-secret-toast .secret-symbol{display:grid;place-items:center;width:26px;height:26px;background:linear-gradient(135deg,var(--m1),var(--m2));color:#0b0b0b;font-weight:900}
+.member-secret-toast b{margin-left:4px;text-decoration:underline}
+
+/* ---------- member world ---------- */
+.member-world{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:24px}
+.member-world-backdrop{position:absolute;inset:0;border:0;background:color-mix(in srgb,var(--m1) 18%,#000000e6);backdrop-filter:blur(8px);cursor:pointer}
+.member-world-panel{position:relative;width:min(1040px,100%);max-height:calc(100dvh - 48px);overflow:auto;color:#f6f6f6;outline:none;
+  background:radial-gradient(120% 90% at 0% 0%,color-mix(in srgb,var(--m1) 38%,transparent),transparent 60%),radial-gradient(90% 80% at 100% 100%,color-mix(in srgb,var(--m2) 26%,transparent),transparent 60%),#0b0b0f;
+  border:2px solid var(--m1);box-shadow:14px 14px 0 color-mix(in srgb,var(--m2) 55%,transparent);font-family:'Space Grotesk',system-ui,sans-serif}
+.mw-symbol-field{position:absolute;inset:0;display:grid;grid-template-columns:repeat(6,1fr);place-items:center;pointer-events:none;overflow:hidden;opacity:.06;font-size:64px;font-weight:900;color:var(--m1);user-select:none}
+.mw-symbol-field span:nth-child(odd){transform:rotate(-12deg);color:var(--m2)}
+.mw-head{position:relative;display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid color-mix(in srgb,var(--m1) 40%,transparent);font:800 11px/1 monospace;letter-spacing:.18em}
+.mw-close{display:grid;place-items:center;width:40px;height:40px;border:2px solid #f6f6f6;background:transparent;color:#f6f6f6;cursor:pointer}
+.mw-close:hover{background:var(--m1);border-color:var(--m1);color:var(--m-ink)}
+.mw-body{position:relative;display:grid;grid-template-columns:minmax(220px,380px) 1fr;gap:32px;padding:28px 28px 20px}
+.mw-portrait{margin:0}
+.mw-portrait-frame{position:relative;display:block;width:100%;aspect-ratio:1;padding:0;border:3px solid var(--m1);background:#0b0b0f;overflow:visible;cursor:pointer;box-shadow:10px 10px 0 var(--m2);transition:transform .15s ease}
+.mw-portrait-frame:active{transform:scale(.97) rotate(-1deg)}
+.mw-portrait-frame>.mw-avatar{width:100%;height:100%}
+.mw-portrait-frame.is-found{box-shadow:10px 10px 0 var(--m2),0 0 40px color-mix(in srgb,var(--m1) 60%,transparent)}
+.mw-sigil-badge{position:absolute;right:-18px;bottom:-18px;width:76px;height:76px;border:3px solid #0b0b0f;box-shadow:0 0 0 2px var(--m1);background:#0b0b0f}
+.mw-portrait figcaption{margin-top:30px;font:800 11px/1.4 monospace;letter-spacing:.14em}
+.mw-signal{opacity:.8}
+.mw-signal.found{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;background:var(--m1);color:var(--m-ink);opacity:1}
+.mw-copy{min-width:0;display:flex;flex-direction:column;gap:12px}
+.mw-role{font:800 11px/1 monospace;letter-spacing:.2em;color:color-mix(in srgb,var(--m1) 75%,#fff)}
+.mw-copy h2{margin:0;font:900 clamp(2.6rem,7vw,5.6rem)/.88 'Anton','Impact',sans-serif;text-transform:uppercase;letter-spacing:-.01em;overflow-wrap:anywhere;color:#fff;text-shadow:4px 4px 0 color-mix(in srgb,var(--m1) 70%,transparent)}
+.mw-alias{margin:0;font:800 13px/1 monospace;letter-spacing:.22em;color:color-mix(in srgb,var(--m2) 75%,#fff)}
+.mw-tagline{margin:4px 0 0;font-size:1.15rem;line-height:1.35;font-weight:700}
+.mw-bio{margin:0;max-width:56ch;line-height:1.65;font-size:.95rem;opacity:.86}
+.mw-cameo{align-self:flex-start;padding:8px 12px;background:var(--m2);color:#0b0b0b;font-weight:900;transform:rotate(-2deg);box-shadow:4px 4px 0 var(--m1)}
+.mw-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;margin:8px 0 0;background:color-mix(in srgb,var(--m1) 40%,transparent);border:1px solid color-mix(in srgb,var(--m1) 40%,transparent)}
+.mw-facts div{padding:12px;background:#0b0b0fe6;min-width:0}
+.mw-facts dt{font:800 9px/1 monospace;letter-spacing:.18em;opacity:.75}
+.mw-facts dd{margin:6px 0 0;font-weight:800;font-size:.95rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mw-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.mw-actions a,.mw-actions button{display:inline-flex;align-items:center;gap:7px;padding:12px 14px;border:2px solid #f6f6f6;background:transparent;color:#f6f6f6;font:800 11px/1 inherit;letter-spacing:.12em;text-decoration:none;cursor:pointer}
+.mw-actions a:hover,.mw-actions button:hover{border-color:var(--m1);color:var(--m1)}
+.mw-actions .mw-primary{background:var(--m1);border-color:var(--m1);color:var(--m-ink)}
+.mw-actions .mw-primary:hover{color:var(--m-ink);filter:brightness(1.1)}
+.mw-share-fallback{margin:0;font-size:.75rem;opacity:.85}.mw-share-fallback code{user-select:all;word-break:break-all}
+.mw-nav{position:relative;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 20px;border-top:1px solid color-mix(in srgb,var(--m1) 40%,transparent)}
+.mw-nav>button{display:inline-flex;align-items:center;gap:8px;border:0;background:none;color:#f6f6f6;font:800 11px/1 monospace;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;padding:8px 0;max-width:30%;overflow:hidden;white-space:nowrap}
+.mw-nav>button:hover{color:var(--m1)}
+.mw-dots{display:flex;gap:7px;flex-wrap:wrap;justify-content:center}
+.mw-dots button{display:grid;place-items:center;width:16px;height:16px;padding:0;border:2px solid var(--dot);border-radius:50%;background:transparent;color:#0b0b0b;cursor:pointer}
+.mw-dots button.active{background:var(--dot);transform:scale(1.25)}
+.mw-dots button svg{color:var(--dot)}.mw-dots button.active svg{color:#0b0b0b}
+.mw-close:focus-visible,.mw-actions :focus-visible,.mw-nav button:focus-visible,.mw-portrait-frame:focus-visible{outline:3px solid var(--m2);outline-offset:3px}
+@media(max-width:760px){
+  .member-world{padding:0;place-items:stretch}
+  .member-world-panel{max-height:100dvh;height:100dvh;border-width:0;box-shadow:none}
+  .mw-body{grid-template-columns:1fr;gap:26px;padding:20px 18px}
+  .mw-portrait{width:min(300px,78%);margin:0 auto}
+  .mw-facts{grid-template-columns:1fr 1fr}.mw-facts div:last-child{grid-column:1/-1}
+  .mw-nav{position:sticky;bottom:0;background:#0b0b0ff2;padding:12px 14px}
+  .mw-nav>button{max-width:34%;font-size:10px}
+  .mw-dots{gap:5px}.mw-dots button{width:13px;height:13px}
+}
+@media(prefers-reduced-motion:reduce){.radio-cameo.is-live{animation:none}}
+
+/* ---------- drawer readability in every theme ---------- */
+/* The crew drawer is dark by default; light-paper themes used to put dark text on it. */
+.crew-drawer{color:#f2f2f2}
+
+.theme-comic-hit .crew-drawer{background:#f4f4f4;color:#171717}
+
+/* Cards keep their dark base everywhere except the themes that restyle them. */
+.crew-card-rich{color:#f2f2f2}
+.theme-star-rule .crew-card-rich{background:#fff;color:#000;border:1px solid #777;box-shadow:3px 3px 0 #6c9e68}
+.crew-card-actions>span{opacity:.85}
+.crew-manifesto p{opacity:.92}
+.crew-toolbar{background:color-mix(in srgb,currentColor 6%,transparent)}
+.crew-toolbar>span{opacity:.9}
+.crew-filters button{border-color:color-mix(in srgb,currentColor 30%,transparent)}
+
+/* Hot Comic's sticky sub-menu (z 29) covered every drawer (z 18–19). */
+.hot-comic-subnav{z-index:16}

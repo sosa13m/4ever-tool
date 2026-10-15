@@ -1,0 +1,177 @@
+/* =========================================================================
+   4EVERTALE (16-bit JRPG)
+   black, white and purple only — black void, pixel fortress,
+   black command windows with white borders, purple cursor / accents / HP.
+   Palette: void #000 · stone #1d1530 / #140e22 · roof #6a46b0
+            purple #b18cff (dark #8a5cf0) · moonlight #efe9ff · white
+   Type:    Pixelify Sans (UI, headings) · Press Start 2P (numbers, labels)
+   ========================================================================= */
+
+.theme-tale{--tw-gold:#b18cff;--tw-ink:#000;color:#fff;font-family:'Pixelify Sans','Courier New',monospace}
+.theme-tale::before{background:#000!important}
+.theme-tale ::selection{background:var(--tw-gold);color:var(--tw-ink)}
+.theme-tale :is(.floating-stickers,.maximal-world,.ambient,.noise){display:none}
+.theme-tale .scanlines{opacity:.05}
+.theme-tale img{image-rendering:pixelated}
+
+/* ---------- the shared window look ---------- */
+.theme-tale :is(.tool-card,.local-player,.conversion-console,.analysis-console,.preload-console,.option,.conversion-result,.results-grid .metric,.identity-strip,.theme-passport,.poster-main,.tale-dialogue,.radio-bar,.lab-teaser,.alternative-keys,.conversion-history,.crew-card-rich,.crew-manifesto,.lab-forecast,.source-badge){
+  background:#000;color:#fff;border:3px solid #fff;border-radius:4px;
+  box-shadow:0 0 0 3px #000,0 0 0 5px #b18cff40,7px 7px 0 5px #0008;text-shadow:2px 2px 0 #00000099}
+
+/* ---------- world layer ---------- */
+.tale-world{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden}
+.tw-sky{position:absolute;inset:0;background:#000}
+/* pixel fortress on a cliff */
+.tw-hills{fill:#0d0914}
+.tw-cliff{fill:#160f22}
+.tw-cliff-edge rect{fill:#3d2c5c}
+.tw-path rect{fill:#2a1d3d}
+.tw-stone rect{fill:#1d1530}
+.tw-moonlit rect{fill:#4a3870}
+.tw-roof rect{fill:#6a46b0}
+.tw-spire rect{fill:#efe9ff}
+.tw-spire .tw-flag{fill:#b18cff}
+.tw-glow rect{fill:#b18cff;filter:drop-shadow(0 0 2px #b18cff)}
+.tw-windows rect{fill:#b18cff}
+.tw-white rect{fill:#efe9ff}
+.tw-stars i{position:absolute;background:#fff;animation:tw-twinkle 3.2s steps(2) infinite}
+.tw-stars i.tint{background:var(--tw-gold)}
+@keyframes tw-twinkle{0%,100%{opacity:1}50%{opacity:.25}}
+.tw-moon{position:absolute;right:9%;top:9%;width:clamp(56px,6vw,96px);filter:drop-shadow(0 0 14px #d9c8ff40)}
+.tw-shooting{position:absolute;left:12%;top:10%;width:90px;height:3px;background:linear-gradient(90deg,transparent,#fff);transform:rotate(18deg);opacity:0;animation:tw-shoot 11s steps(14) infinite}
+@keyframes tw-shoot{0%,86%{opacity:0;transform:translate(0,0) rotate(18deg)}88%{opacity:1}100%{opacity:0;transform:translate(420px,140px) rotate(18deg)}}
+.tw-land{position:absolute;left:0;right:0;bottom:0;width:100%;height:54vh;min-height:300px}
+.tw-windows .blink{animation:tw-blink 2.6s steps(1) infinite}
+.tw-stars{opacity:.7}
+@keyframes tw-blink{0%,70%{opacity:1}71%,100%{opacity:.15}}
+.tw-fireflies i{position:absolute;width:4px;height:4px;background:var(--tw-gold);box-shadow:0 0 8px var(--tw-gold);animation:tw-fly 8s steps(16) infinite}
+@keyframes tw-fly{0%,100%{transform:translate(0,0);opacity:.2}50%{transform:translate(var(--drift),-40px);opacity:1}}
+.tw-save{position:absolute;left:4%;bottom:7%;display:grid;justify-items:center;gap:4px;color:var(--tw-gold)}
+.tw-save span{font-size:34px;animation:tw-save 1.2s steps(2) infinite;text-shadow:0 0 12px var(--tw-gold)}
+.tw-save small{font:8px/1 'Press Start 2P',monospace;letter-spacing:.06em}
+@keyframes tw-save{50%{transform:scale(1.25) rotate(45deg)}}
+
+/* ---------- header ---------- */
+.theme-tale .header{background:#000000f2;border-bottom:3px solid #fff;box-shadow:0 3px 0 #000;backdrop-filter:none}
+.theme-tale .brand-button img{filter:drop-shadow(3px 3px 0 #000)}
+.theme-tale .desktop-nav button{font:600 .95rem/1 'Pixelify Sans',monospace;color:#fff;text-transform:uppercase;letter-spacing:.04em;padding:.55rem .8rem;border-radius:0}
+.theme-tale .desktop-nav button::before,.theme-tale .tool-tabs button::before{content:'▶';content:'▶' / '';display:inline-block;width:0;overflow:hidden;color:var(--tw-gold);transition:none}
+.theme-tale .desktop-nav button:is(:hover,.active)::before,.theme-tale .tool-tabs button:is(:hover,.active)::before{width:1.1em}
+.theme-tale .desktop-nav button.active{color:var(--tw-gold);background:none}
+.theme-tale .theme-badge{border:2px solid #fff;border-radius:4px;background:#000;color:#fff;font-family:'Pixelify Sans',monospace}
+.theme-tale .theme-badge i{background:var(--tw-gold);border-radius:0}
+.theme-tale .icon-button{border:2px solid #fff;border-radius:4px;background:#000;color:#fff}
+.theme-tale .icon-button:hover{background:var(--tw-gold);color:var(--tw-ink)}
+
+/* ---------- headings & text ---------- */
+.theme-tale :is(.gate h1,.hero h1,.tool-heading h2,.lab-teaser h2,.drawer-head h2){font-family:'Pixelify Sans',monospace;font-weight:700;letter-spacing:.02em;text-shadow:4px 4px 0 #000;text-transform:uppercase}
+.theme-tale .hero h1{font-size:clamp(3.2rem,7vw,6.4rem);line-height:.95;color:#fff}
+.theme-tale .hero h1 span{color:var(--tw-gold);-webkit-text-stroke:0}
+.theme-tale :is(.hero-copy>p,.gate-subline,.tool-cloud){font:500 1.05rem/1.55 'Pixelify Sans',monospace;color:#f1ecf8}
+.theme-tale :is(.eyebrow,.tape,.gate-note){font-family:'Press Start 2P',monospace;font-size:.58rem;letter-spacing:.04em;line-height:1.6}
+.theme-tale .tape{background:#000;color:var(--tw-gold);border:2px solid #fff;border-radius:4px;box-shadow:4px 4px 0 #000;transform:none;padding:.6rem .8rem}
+.theme-tale .gate-note{color:#d8cdee}
+.theme-tale .gate-note b{color:var(--tw-gold)}
+
+/* ---------- gate: title screen ---------- */
+.theme-tale .gate{background:transparent}
+.theme-tale .gate-logo{max-height:150px;filter:drop-shadow(5px 5px 0 #000)}
+.theme-tale .gate .eyebrow{color:var(--tw-gold)}
+.theme-tale .gate h1{font-size:clamp(2.6rem,6vw,5rem);color:#fff}
+.theme-tale .preload-console{padding:16px 18px}
+.theme-tale .preload-console span{font-family:'Press Start 2P',monospace;font-size:.55rem}
+.theme-tale .gate .text-button{font:600 1.05rem/1 'Pixelify Sans',monospace;color:#fff;text-decoration:none;padding:.8rem 1rem;border:0;background:none}
+.theme-tale .gate .text-button::before{content:'▶ ';content:'▶ ' / '';color:var(--tw-gold);visibility:hidden}
+.theme-tale .gate .text-button:hover::before,.theme-tale .gate .text-button:focus-visible::before{visibility:visible}
+.theme-tale .theme-peek{color:#fff;font-family:'Pixelify Sans',monospace}
+
+/* ---------- HP bars ---------- */
+.theme-tale :is(.analysis-progress,.preload-line){height:12px;background:#1d1230;border:2px solid #fff;border-radius:0;box-shadow:2px 2px 0 #000}
+.theme-tale :is(.analysis-progress,.preload-line) i{background:repeating-linear-gradient(90deg,#b18cff 0 6px,#8a5cf0 6px 8px);border-radius:0}
+
+/* ---------- buttons: command windows with the ▶ cursor ---------- */
+.theme-tale :is(.sticker-button,.massive-action,.player-button,.tool-tabs button,.option button,.converter-source-tabs button,.bpm-range button,.paste-button,.identity-strip button,.lab-open){
+  font:600 1rem/1 'Pixelify Sans',monospace;letter-spacing:.03em;text-transform:uppercase;border-radius:4px;transform:none;
+  background:#000;color:#fff;border:2px solid #fff;box-shadow:0 0 0 2px #000,4px 4px 0 2px #000a}
+.theme-tale :is(.sticker-button,.massive-action,.option button,.converter-source-tabs button,.bpm-range button,.paste-button,.lab-open):hover:not(:disabled){color:var(--tw-gold);transform:none}
+.theme-tale :is(.sticker-button,.massive-action,.option button,.converter-source-tabs button,.bpm-range button,.lab-open)::before{content:'▶';content:'▶' / '';display:inline-block;width:0;overflow:hidden;color:var(--tw-gold)}
+.theme-tale :is(.sticker-button,.massive-action,.option button,.converter-source-tabs button,.bpm-range button,.lab-open):is(:hover,.selected,.active)::before{width:1.1em}
+.theme-tale :is(.sticker-button.primary,.massive-action){background:var(--tw-gold);color:var(--tw-ink);text-shadow:none}
+.theme-tale :is(.sticker-button.primary,.massive-action):hover:not(:disabled){color:var(--tw-ink);filter:brightness(1.08)}
+.theme-tale :is(.sticker-button.primary,.massive-action)::before{color:var(--tw-ink)}
+.theme-tale .massive-action:disabled{background:#241a33;color:#c4b8d8;filter:none}
+.theme-tale .massive-action:disabled::before{display:none}
+.theme-tale :is(.tool-tabs button.active,.option button.selected,.converter-source-tabs button.active,.bpm-range button.selected){color:var(--tw-gold);background:#241536}
+.theme-tale .option button:disabled{opacity:.4}
+.theme-tale .player-button{border-radius:4px}
+.theme-tale .text-button{color:#fff;font-family:'Pixelify Sans',monospace}
+
+/* ---------- hero ---------- */
+.theme-tale .hero-art{transform:none!important}
+.theme-tale .poster{border:0}
+.theme-tale .poster-main{inset:8% 4%;transform:none;justify-content:center;gap:1.4rem;padding:2.4rem 2rem}
+.theme-tale .poster-main img{max-width:92%}
+.theme-tale .poster-main strong{font:400 clamp(.85rem,1.4vw,1.15rem)/1.9 'Press Start 2P',monospace;color:var(--tw-gold)}
+.theme-tale .poster-main::after{content:'LV 27   HP 99/99   MP 44/44';font:400 .62rem/1 'Press Start 2P',monospace;color:#fff;white-space:pre;letter-spacing:.02em}
+.theme-tale :is(.poster-small,.sticker-round,.barcode){display:none}
+.theme-tale .theme-passport{transform:none;padding:12px 16px}
+.theme-tale .theme-passport span{color:#d8cdee}
+.theme-tale .theme-passport strong{font-family:'Press Start 2P',monospace;font-size:1.4rem;color:var(--tw-gold)}
+.tale-dialogue{position:relative;margin:1.4rem 0 0;max-width:560px;min-height:88px;padding:16px 44px 16px 18px;font:500 1.15rem/1.5 'Pixelify Sans',monospace}
+.tale-caret{position:absolute;right:16px;bottom:10px;font-style:normal;color:var(--tw-gold);font-size:.8rem;opacity:0}
+.tale-caret.done{opacity:1;animation:tw-blink 1s steps(1) infinite}
+.tale-dialogue .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- tools ---------- */
+.theme-tale .tool-stage{background:transparent;border:0}
+.theme-tale .identity-strip>*{border-color:#ffffff33}
+.theme-tale .identity-strip>span{color:var(--tw-ink)!important;background:var(--tw-gold);text-shadow:none}
+.theme-tale .tool-card::before{color:#fff;opacity:.04;font-family:'Pixelify Sans',monospace}
+.theme-tale .tool-heading>span{background:var(--tw-gold);color:var(--tw-ink);border-radius:2px;font-family:'Press Start 2P',monospace;text-shadow:none}
+.theme-tale .tool-heading p{font:400 .58rem/1.6 'Press Start 2P',monospace;color:var(--tw-gold)}
+.theme-tale .tool-heading h2{font-size:clamp(2.2rem,4.6vw,3.8rem);color:#fff}
+.theme-tale :is(.url-field>span,.option>span){font:400 .58rem/1.6 'Press Start 2P',monospace;color:#d8cdee;letter-spacing:.02em}
+.theme-tale .url-field input,.theme-tale :is(.lab-selection input,.lab-target input){background:#000;color:#fff;border:2px solid #fff;border-radius:2px;box-shadow:inset 3px 3px 0 #000a;font:500 1rem 'Pixelify Sans',monospace;caret-color:var(--tw-gold)}
+.theme-tale .url-field input:focus{outline:3px solid var(--tw-gold);outline-offset:2px}
+.theme-tale .option{box-shadow:none;border-width:2px}
+.theme-tale :is(.converter-file-zone,.drop-zone){background:#000000cc;border:3px dashed #fff;border-radius:4px;color:#fff;box-shadow:none}
+.theme-tale :is(.converter-file-zone,.drop-zone):hover{border-color:var(--tw-gold)}
+.theme-tale .drop-zone strong{font-family:'Pixelify Sans',monospace;font-weight:700;text-shadow:3px 3px 0 #000}
+.theme-tale .results-grid .metric span{font:400 .55rem/1.6 'Press Start 2P',monospace;color:#d8cdee}
+.theme-tale .results-grid .metric strong{font:400 clamp(1.3rem,2.6vw,2.2rem)/1.3 'Press Start 2P',monospace;color:var(--tw-gold);text-shadow:3px 3px 0 #000}
+.theme-tale .conversion-result{border-color:var(--tw-gold)}
+.theme-tale .tool-card .legal-copy{color:#ece6f5}
+.theme-tale .tool-card .prototype-tag{color:var(--tw-gold);border:2px dashed #ffffff80;border-radius:2px;font-family:'Pixelify Sans',monospace}
+.theme-tale .lab-forecast{--lab-cell:#000;padding:0;gap:2px;background:#fff}
+.theme-tale .lab-forecast strong{font-family:'Press Start 2P',monospace;font-size:.95rem;line-height:1.5;color:var(--tw-gold)}
+.theme-tale .lab-handle,.theme-tale .lab-handle::after{background:var(--tw-gold)}
+.theme-tale .lab-slider,.theme-tale .volume-slider{accent-color:var(--tw-gold)}
+
+/* ---------- LAB teaser: the "new area" banner ---------- */
+.theme-tale .lab-teaser{padding:3rem 1.5rem;margin-bottom:7rem}
+.theme-tale .lab-teaser::before{display:none}
+.theme-tale .lab-teaser>span{font:400 .62rem/1.6 'Press Start 2P',monospace;color:var(--tw-gold)}
+.theme-tale .lab-teaser h2{font-size:clamp(3rem,8vw,6.5rem);color:#fff}
+.theme-tale .lab-teaser .lab-open{background:var(--tw-gold);color:var(--tw-ink);text-shadow:none}
+
+/* ---------- radio, drawers, menus ---------- */
+.theme-tale .radio-bar{border-radius:0;border-width:3px 0 0;box-shadow:0 -3px 0 #000}
+.theme-tale .radio-status-chip{border-radius:0;font-family:'Press Start 2P',monospace;font-size:.5rem}
+.theme-tale .track-meta strong{font-family:'Pixelify Sans',monospace}
+.theme-tale :is(.drawer,.theme-drawer,.crew-drawer,.mobile-nav-sheet){background:#000;color:#fff;border-left:4px solid #fff;box-shadow:-4px 0 0 #000}
+.theme-tale .crew-card-rich{box-shadow:none;border-width:2px}
+.theme-tale :is(.crew-filters button,.crew-card-actions button,.crew-card-actions a){border-radius:2px}
+.theme-tale .member-world-panel{font-family:'Pixelify Sans',monospace}
+
+@media(max-width:860px){
+  .theme-tale .hero-art{min-height:320px}
+  .theme-tale .poster-main{inset:4%}
+  .tw-land{height:40vh;min-height:240px}
+  .tw-save{display:none}
+  .theme-tale .tale-dialogue{font-size:1rem}
+}
+@media(prefers-reduced-motion:reduce){.tw-stars i,.tw-shooting,.tw-fireflies i,.tw-save span,.tw-windows .blink,.tale-caret.done{animation:none}}
+.theme-tale .track-meta span{color:#ece6f5;opacity:1}
+.theme-tale .radio-status-chip{color:#000;background:#ece6f5}
+.theme-tale .drawer-head span{color:var(--tw-gold)}

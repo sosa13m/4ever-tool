@@ -1,0 +1,56 @@
+# 4EVERTOOLS — the converter API on Render (free plan).
+# Render → New → Blueprint → pick this repo. The web itself goes on Vercel (vercel.json).
+services:
+  - type: web
+    name: 4ever-tool-api
+    runtime: docker
+    plan: free
+    region: virginia            # closest Render region to Chile
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /api/ready
+    autoDeployTrigger: commit
+    buildFilter:
+      paths:
+        - backend/**
+    envVars:
+      # Your Vercel address, e.g. https://4ever-tool.vercel.app (several: separate with commas).
+      - key: ALLOWED_ORIGINS
+        sync: false
+      # Render's proxy passes the visitor's real IP; the abuse limits need it.
+      - key: TRUST_PROXY_HEADERS
+        value: "true"
+      - key: ENABLE_API_DOCS
+        value: "false"
+      - key: STORAGE_DIR
+        value: /app/storage
+      # YouTube is open for everyone. To close it, add YTDLP_ACCESS_KEY (12+ characters) in Render.
+      - key: YTDLP_ENABLED
+        value: "true"
+      - key: YTDLP_MAX_DURATION_SECONDS
+        value: "1200"
+      - key: YTDLP_JS_RUNTIMES
+        value: deno,node
+      # Free plan: 512 MB RAM and a small CPU, so one conversion at a time and 100 MB uploads.
+      - key: MAX_SOURCE_BYTES
+        value: "104857600"
+      - key: MAX_CONCURRENT_JOBS
+        value: "1"
+      - key: MAX_CONCURRENT_DOWNLOADS
+        value: "1"
+      - key: MAX_ACTIVE_JOBS_PER_CLIENT
+        value: "1"
+      - key: MAX_QUEUED_JOBS
+        value: "10"
+      - key: MIN_FREE_DISK_MB
+        value: "200"
+      - key: FILE_TTL_SECONDS
+        value: "3600"
+      - key: MAX_REDIRECTS
+        value: "5"
+      - key: RATE_LIMIT_REQUESTS
+        value: "60"
+      - key: RATE_LIMIT_WINDOW_SECONDS
+        value: "60"
+      - key: LOG_LEVEL
+        value: INFO

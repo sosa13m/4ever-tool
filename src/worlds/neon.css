@@ -1,0 +1,183 @@
+/* =========================================================================
+   4EVER NEON OG · festival / tour site
+   Palette: stage black #050505 · panel #0d0d0d / #141414
+            toxic green #56ff18 · hot pink #ff29bd · white
+   Type:    Big Shoulders Display (lineup poster) · Archivo (UI)
+   Lights sweep slowly and never strobe.
+   ========================================================================= */
+
+.theme-neon-tour{--nn-green:#56ff18;--nn-pink:#ff29bd;--nn-panel:#0d0d0d;--nn-panel-2:#151515;
+  color:#fff;font-family:'Archivo','Helvetica Neue',Arial,sans-serif;background:#050505}
+.theme-neon-tour::before{background:#050505!important}
+.theme-neon-tour ::selection{background:var(--nn-green);color:#000}
+.theme-neon-tour :is(.floating-stickers,.maximal-world,.ambient,.scanlines){display:none}
+.theme-neon-tour .noise{opacity:.07;mix-blend-mode:screen}
+
+/* ---------- world: truss, moving heads, lasers, haze, crowd ---------- */
+.neon-tour-world{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden;background:radial-gradient(ellipse at 50% 110%,#123a0a 0,transparent 55%),#050505}
+.nn-haze{position:absolute;border-radius:50%;filter:blur(80px);opacity:.35}
+.nn-haze-a{left:-10%;top:30%;width:60%;height:50%;background:#56ff1830;animation:nn-drift 22s ease-in-out infinite alternate}
+.nn-haze-b{right:-10%;top:20%;width:55%;height:55%;background:#ff29bd2a;animation:nn-drift 26s ease-in-out infinite alternate-reverse}
+@keyframes nn-drift{to{transform:translate(8%,-6%)}}
+.nn-truss{position:absolute;left:0;right:0;top:0;height:34px;background:
+  linear-gradient(#2a2a2a,#2a2a2a) 0 3px/100% 3px no-repeat,linear-gradient(#2a2a2a,#2a2a2a) 0 28px/100% 3px no-repeat,
+  repeating-linear-gradient(60deg,transparent 0 14px,#262626 14px 16px),repeating-linear-gradient(-60deg,transparent 0 14px,#262626 14px 16px),#0b0b0b}
+.nn-head{position:absolute;top:22px;width:26px;height:26px;margin-left:-13px;border-radius:6px;background:#1c1c1c;box-shadow:inset 0 -6px 0 #000}
+.nn-head::after{content:'';position:absolute;left:5px;right:5px;bottom:2px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 12px var(--c)}
+.nn-head.green{--c:var(--nn-green)}.nn-head.pink{--c:var(--nn-pink)}
+.nn-beam{position:absolute;left:50%;top:22px;width:46vh;height:120vh;transform-origin:50% 0;transform:translateX(-50%) rotate(var(--swing));
+  background:linear-gradient(180deg,color-mix(in srgb,var(--c) 30%,transparent),transparent 75%);clip-path:polygon(48% 0,52% 0,100% 100%,0 100%);opacity:.32;mix-blend-mode:screen;animation:nn-sweep 9s ease-in-out infinite alternate;animation-delay:var(--d)}
+@keyframes nn-sweep{from{transform:translateX(-50%) rotate(var(--swing))}to{transform:translateX(-50%) rotate(calc(var(--swing) * -1))}}
+.nn-lasers{position:absolute;left:50%;bottom:16vh;width:0;height:0}
+.nn-lasers i{position:absolute;left:0;bottom:0;width:2px;height:140vh;transform-origin:50% 100%;transform:rotate(var(--a));background:linear-gradient(0deg,var(--nn-green),#56ff1800 85%);box-shadow:0 0 8px var(--nn-green);opacity:.45;animation:nn-fan 7s ease-in-out infinite alternate}
+.nn-lasers i:nth-child(even){background:linear-gradient(0deg,var(--nn-pink),#ff29bd00 85%);box-shadow:0 0 8px var(--nn-pink)}
+@keyframes nn-fan{to{transform:rotate(calc(var(--a) * .55))}}
+.nn-crowd{position:absolute;left:0;right:0;bottom:0;width:100%;height:24vh;min-height:150px}
+.nn-crowd path{fill:#000}
+.nn-stage-lip{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--nn-green);box-shadow:0 0 18px var(--nn-green);opacity:.7}
+.theme-neon-tour:has(.shell) :is(.nn-beam,.nn-lasers i){opacity:.16}
+
+/* ---------- header ---------- */
+.theme-neon-tour .header{background:#050505f0;border-bottom:1px solid #ffffff14;box-shadow:0 2px 0 var(--nn-green),0 0 26px #56ff1840;backdrop-filter:none}
+.theme-neon-tour .brand-button img{filter:drop-shadow(0 0 10px #56ff1860)}
+.theme-neon-tour .desktop-nav button{font:900 1.05rem/1 'Big Shoulders Display','Arial Narrow',sans-serif;letter-spacing:.06em;color:#fff;text-transform:uppercase;border-radius:0;padding:.6rem .9rem}
+.theme-neon-tour .desktop-nav button:hover{color:var(--nn-green)}
+.theme-neon-tour .desktop-nav button.active{background:none;color:var(--nn-green);text-shadow:0 0 12px #56ff1899;box-shadow:inset 0 -3px 0 var(--nn-green)}
+.theme-neon-tour .theme-badge{background:#000;color:#fff;border:1px solid var(--nn-pink);border-radius:999px;font:700 .72rem/1 'Archivo',sans-serif}
+.theme-neon-tour .theme-badge i{background:var(--nn-pink);box-shadow:0 0 8px var(--nn-pink);border-radius:50%}
+.theme-neon-tour .icon-button{background:#000;color:#fff;border:1px solid #ffffff33;border-radius:8px}
+.theme-neon-tour .icon-button:hover{border-color:var(--nn-green);color:var(--nn-green);box-shadow:0 0 14px #56ff1855}
+
+/* ---------- type ---------- */
+.theme-neon-tour :is(.gate h1,.hero h1,.tool-heading h2,.lab-teaser h2,.drawer-head h2){font-family:'Big Shoulders Display','Arial Narrow',Impact,sans-serif;font-weight:900;letter-spacing:.01em;text-transform:uppercase}
+
+/* ---------- gate: the ticket ---------- */
+.theme-neon-tour .gate{background:transparent;color:#fff}
+.theme-neon-tour .gate-logo{max-height:180px;filter:drop-shadow(0 0 22px #56ff1855)}
+.theme-neon-tour .gate .eyebrow{display:inline-block;padding:.45rem .9rem;background:var(--nn-pink);color:#000;border-radius:999px;font:800 .74rem/1 'Archivo',sans-serif;letter-spacing:.12em}
+.theme-neon-tour .gate h1{font-size:clamp(4rem,11vw,10rem);line-height:.86;color:var(--nn-green);text-shadow:0 0 18px #56ff1880,0 0 60px #56ff1840}
+.theme-neon-tour .gate-subline{color:#e6e6e6;font:500 1.02rem/1.55 'Archivo',sans-serif}
+.theme-neon-tour .preload-console{position:relative;background:#0b0b0b;border:2px solid var(--nn-green);border-radius:14px;padding:18px 20px 18px 56px;box-shadow:0 0 30px #56ff1830}
+.theme-neon-tour .preload-console::before{content:'ADMIT ONE';position:absolute;left:0;top:0;bottom:0;width:38px;display:grid;place-items:center;writing-mode:vertical-rl;transform:rotate(180deg);background:var(--nn-green);color:#000;font:900 .9rem/1 'Big Shoulders Display',sans-serif;letter-spacing:.2em;border-radius:0 11px 11px 0;border-left:2px dashed #000}
+.theme-neon-tour .preload-console :is(span,strong){color:#fff}
+.theme-neon-tour :is(.analysis-progress,.preload-line){background:#1a1a1a;border:0;border-radius:999px;height:8px}
+.theme-neon-tour :is(.analysis-progress,.preload-line) i{background:linear-gradient(90deg,var(--nn-green),#b6ff8a);box-shadow:0 0 10px var(--nn-green);border-radius:999px}
+.theme-neon-tour .gate .text-button{color:#fff;font:900 1.1rem/1 'Big Shoulders Display',sans-serif;letter-spacing:.06em;text-decoration:underline;text-decoration-color:var(--nn-pink);text-underline-offset:6px}
+.theme-neon-tour .theme-peek{color:#fff}
+.theme-neon-tour .gate-note{color:#d9d9d9}
+.theme-neon-tour .gate-note b{color:#000;background:var(--nn-green);padding:1px 5px}
+
+/* ---------- buttons: chamfered stage passes ---------- */
+.theme-neon-tour :is(.sticker-button,.massive-action,.player-button,.tool-tabs button,.option button,.converter-source-tabs button,.bpm-range button,.paste-button,.identity-strip button,.lab-open){
+  font:900 1.05rem/1 'Big Shoulders Display','Arial Narrow',sans-serif;letter-spacing:.08em;text-transform:uppercase;border-radius:0;transform:none;box-shadow:none;clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%)}
+.theme-neon-tour :is(.sticker-button.primary,.massive-action,.player-button){background:var(--nn-green);color:#000;border:0}
+.theme-neon-tour :is(.sticker-button.primary,.massive-action):hover:not(:disabled){background:#7dff4d;transform:none}
+.theme-neon-tour .massive-action:disabled{background:#203a14;color:#c9f0b8}
+.theme-neon-tour .sticker-button.ghost{background:var(--nn-pink);color:#000;border:0}
+.theme-neon-tour :is(.tool-tabs button,.option button,.converter-source-tabs button,.bpm-range button,.paste-button){background:#1c1c1c;color:#fff;border:0}
+.theme-neon-tour :is(.tool-tabs button.active,.option button.selected,.converter-source-tabs button.active,.bpm-range button.selected){background:var(--nn-green);color:#000}
+.theme-neon-tour :is(.tool-tabs button,.option button,.converter-source-tabs button,.bpm-range button):hover:not(:disabled):not(.active):not(.selected){background:#2a2a2a;color:var(--nn-green)}
+.theme-neon-tour :is(button,a):focus-visible{outline:3px solid var(--nn-pink);outline-offset:3px}
+.theme-neon-tour .option button:disabled{opacity:.4}
+.theme-neon-tour .text-button{color:#fff}
+
+/* ---------- hero: tour poster ---------- */
+.theme-neon-tour .hero::before{content:'LIVE · 4EVER TOUR · LIVE';font:900 .8rem/1 'Big Shoulders Display',sans-serif;letter-spacing:.3em;color:var(--nn-pink);opacity:.9}
+.theme-neon-tour .tape{display:inline-block;background:#000;color:var(--nn-green);border:1px solid var(--nn-green);border-radius:999px;box-shadow:0 0 14px #56ff1840;transform:none;font:800 .7rem/1 'Archivo',sans-serif;letter-spacing:.14em;padding:.5rem .9rem}
+.theme-neon-tour .hero h1{font-size:clamp(4.4rem,10vw,10rem);line-height:.84;color:#fff}
+.theme-neon-tour .hero h1 span{color:var(--nn-green);-webkit-text-stroke:0;text-shadow:0 0 16px #56ff1880,0 0 50px #56ff1840}
+.theme-neon-tour .hero-copy>p{color:#e6e6e6;max-width:540px;font:500 1rem/1.6 'Archivo',sans-serif}
+.theme-neon-tour .theme-passport{background:#000;color:#fff;border:1px solid var(--nn-pink);border-radius:12px;transform:none;box-shadow:0 0 22px #ff29bd33}
+.theme-neon-tour .theme-passport span{color:#f2c6e6}
+.theme-neon-tour .theme-passport strong{font-family:'Big Shoulders Display',sans-serif;font-weight:900;color:var(--nn-pink);text-shadow:0 0 12px #ff29bd80}
+.theme-neon-tour .theme-passport em{color:#e6e6e6}
+.theme-neon-tour .hero-art{min-height:520px;transform:none!important}
+.theme-neon-tour .poster{border:0;box-shadow:none}
+.theme-neon-tour .poster-main{inset:5% 4% 6%;transform:none;background:radial-gradient(ellipse at 50% 120%,#56ff1840,transparent 60%),#090909;color:#fff;border:2px solid var(--nn-green);border-radius:18px;justify-content:center;gap:1.2rem;padding:2.2rem 2rem 5.6rem;box-shadow:0 0 40px #56ff1833,inset 0 0 40px #56ff1814;overflow:hidden}
+.theme-neon-tour .poster-main img{max-width:84%;filter:drop-shadow(0 0 18px #56ff1866)}
+.theme-neon-tour .poster-main strong{font:900 clamp(1.8rem,3vw,2.8rem)/.95 'Big Shoulders Display',sans-serif;letter-spacing:.04em;color:#fff;text-transform:uppercase}
+.theme-neon-tour .poster-main::after{content:'NIGHT 01   NIGHT 02   NIGHT 03';position:absolute;left:0;right:0;bottom:0;padding:1.1rem 1.4rem;background:var(--nn-pink);color:#000;font:900 clamp(1rem,1.6vw,1.4rem)/1 'Big Shoulders Display',sans-serif;letter-spacing:.14em;white-space:pre;text-align:center}
+.theme-neon-tour :is(.poster-small,.sticker-round,.barcode){display:none}
+
+/* ---------- identity strip ---------- */
+.theme-neon-tour .identity-strip{background:#000;color:#fff;border:1px solid #ffffff1f;border-radius:12px;box-shadow:none}
+.theme-neon-tour .identity-strip::after{content:'SOUNDCHECK · SOUNDCHECK ·';color:var(--nn-pink);opacity:.9}
+.theme-neon-tour .identity-strip>*{border-color:#ffffff1f}
+.theme-neon-tour .identity-strip>span{background:var(--nn-green);color:#000!important}
+.theme-neon-tour .identity-strip button{background:var(--nn-green);color:#000}
+
+/* ---------- tools: LED-wall panels ---------- */
+.theme-neon-tour .tool-stage{background:transparent;border:0}
+.theme-neon-tour .tool-stage::before{content:'MAIN STAGE · AUDIO TOOLS';font-family:'Big Shoulders Display',sans-serif;font-weight:900;color:var(--nn-green);opacity:.8}
+.theme-neon-tour :is(.tool-card,.local-player,.conversion-console,.analysis-console){background:var(--nn-panel);color:#fff;border:1px solid #56ff1866;border-radius:18px;box-shadow:0 0 0 1px #000,0 0 40px #56ff1822,0 30px 60px #000c}
+.theme-neon-tour .tool-card::before{color:var(--nn-green);opacity:.05;font-family:'Big Shoulders Display',sans-serif;font-weight:900}
+.theme-neon-tour .tool-heading>span{background:var(--nn-pink);color:#000;border-radius:999px;font:900 .95rem/1 'Big Shoulders Display',sans-serif}
+.theme-neon-tour .tool-heading p{color:var(--nn-green);font:800 .74rem/1.3 'Archivo',sans-serif;letter-spacing:.14em}
+.theme-neon-tour .tool-heading h2{font-size:clamp(2.8rem,5.6vw,5rem);color:#fff}
+.theme-neon-tour :is(.url-field>span,.option>span){font:800 .74rem/1 'Archivo',sans-serif;letter-spacing:.12em;color:#d9d9d9;text-transform:uppercase}
+.theme-neon-tour .url-field input,.theme-neon-tour :is(.lab-selection input,.lab-target input){background:#000;color:#fff;border:1px solid #ffffff40;border-radius:10px;box-shadow:none;font:500 1rem 'Archivo',sans-serif;caret-color:var(--nn-green)}
+.theme-neon-tour input::placeholder{color:#8f8f8f}
+.theme-neon-tour .url-field input:focus{outline:2px solid var(--nn-green);outline-offset:2px;box-shadow:0 0 18px #56ff1844}
+.theme-neon-tour .option{background:var(--nn-panel-2);border:1px solid #ffffff14;border-radius:14px}
+.theme-neon-tour :is(.converter-file-zone,.drop-zone){background:var(--nn-panel-2);border:2px dashed #56ff1880;border-radius:14px;color:#fff;box-shadow:none}
+.theme-neon-tour :is(.converter-file-zone,.drop-zone):hover{border-color:var(--nn-pink)}
+.theme-neon-tour .drop-zone strong{font-family:'Big Shoulders Display',sans-serif;font-weight:900}
+.theme-neon-tour .source-badge{background:#000;color:var(--nn-green);border:1px solid var(--nn-green);border-radius:999px}
+.theme-neon-tour .conversion-result{background:var(--nn-panel-2);border:0;border-left:6px solid var(--nn-green);border-radius:14px;color:#fff}
+.theme-neon-tour .results-grid .metric{background:#000;color:#fff;border:1px solid #ffffff1f;border-radius:14px}
+.theme-neon-tour .results-grid .metric strong{font-family:'Big Shoulders Display',sans-serif;font-weight:900;color:var(--nn-green);text-shadow:0 0 14px #56ff1866}
+.theme-neon-tour .results-grid .metric span{color:#d9d9d9}
+.theme-neon-tour .alternative-keys{border:1px solid #ffffff26;border-radius:12px}
+.theme-neon-tour .tool-card :is(.legal-copy,.prototype-tag){color:#cfcfcf;opacity:1}
+.theme-neon-tour .tool-card .prototype-tag{border:1px solid var(--nn-pink);border-radius:999px}
+.theme-neon-tour .lab-forecast{--lab-cell:#000;border-radius:12px;overflow:hidden}
+.theme-neon-tour .conversion-history{border-color:#ffffff26;border-radius:14px}
+.theme-neon-tour :is(.lab-slider,.volume-slider){accent-color:var(--nn-green)}
+
+/* ---------- LAB teaser: second stage ---------- */
+.theme-neon-tour .lab-teaser{background:radial-gradient(ellipse at 50% 0,#ff29bd55,transparent 65%),#0b0b0b;color:#fff;border:2px solid var(--nn-pink);border-radius:18px;padding:3rem 1.5rem;box-shadow:0 0 40px #ff29bd33}
+.theme-neon-tour .lab-teaser::before{content:'SECOND STAGE';color:var(--nn-pink);opacity:1;font:900 .8rem/1 'Big Shoulders Display',sans-serif;letter-spacing:.3em}
+.theme-neon-tour .lab-teaser>span{color:#ffd6f2;font-weight:800;letter-spacing:.14em}
+.theme-neon-tour .lab-teaser h2{font-size:clamp(3.6rem,10vw,8.4rem);color:#fff;text-shadow:0 0 18px #ff29bd88}
+.theme-neon-tour .lab-teaser .lab-open{background:var(--nn-pink);color:#000}
+.theme-neon-tour .tool-cloud{color:#e6e6e6}
+
+/* ---------- lineup poster ---------- */
+.nn-lineup{display:none}
+.theme-neon-tour .nn-lineup{display:block;margin:4rem 0 7.5rem;padding:3rem clamp(1.2rem,4vw,3.6rem) 0;text-align:center;background:radial-gradient(ellipse at 50% 0,#56ff1826,transparent 60%),#000;border:1px solid #ffffff1f;border-radius:18px;overflow:hidden}
+.nn-lineup header{display:grid;gap:.5rem;margin-bottom:2rem}
+.nn-lineup header small{font:800 .74rem/1 'Archivo',sans-serif;letter-spacing:.3em;color:#d9d9d9}
+.nn-lineup header strong{font:900 clamp(4rem,12vw,10rem)/.8 'Big Shoulders Display','Arial Narrow',sans-serif;color:var(--nn-green);text-shadow:0 0 22px #56ff1880}
+.nn-lineup header span{font:800 .8rem/1 'Archivo',sans-serif;letter-spacing:.24em;color:var(--nn-pink)}
+.nn-tier{margin:0 0 1.1rem;line-height:1.05}
+.nn-tier i{font-style:normal;color:#ffffff66}
+.nn-tier button{border:0;background:none;padding:0 .1em;color:inherit;font:inherit;text-transform:uppercase;cursor:pointer}
+.nn-tier button:hover{color:var(--nn-green);text-shadow:0 0 14px #56ff1899}
+.nn-tier-1{font:900 clamp(2.4rem,6vw,5.2rem)/1 'Big Shoulders Display',sans-serif;color:#fff}
+.nn-tier-2{font:900 clamp(1.6rem,3.6vw,3rem)/1.05 'Big Shoulders Display',sans-serif;color:#e6e6e6}
+.nn-tier-3{font:900 clamp(1.2rem,2.4vw,2rem)/1.1 'Big Shoulders Display',sans-serif;color:var(--nn-pink)}
+.nn-tier-3 button:hover{color:#fff}
+.nn-radio{margin:.6rem 0 2.4rem;border:0;background:none;color:var(--nn-green);font:900 1.2rem/1 'Big Shoulders Display',sans-serif;letter-spacing:.12em;cursor:pointer}
+.nn-radio:hover{text-decoration:underline}
+.nn-lineup footer{display:flex;flex-wrap:wrap;justify-content:center;gap:.6rem 2rem;margin:0 calc(clamp(1.2rem,4vw,3.6rem) * -1);padding:1rem;background:var(--nn-green);color:#000;font:900 1.1rem/1 'Big Shoulders Display',sans-serif;letter-spacing:.12em}
+
+/* ---------- radio, drawers ---------- */
+.theme-neon-tour .radio-bar{background:#050505f5;color:#fff;border-top:2px solid var(--nn-green);box-shadow:0 -6px 30px #56ff1826}
+.theme-neon-tour .radio-status-chip{border-radius:999px;background:var(--nn-pink);color:#000}
+.theme-neon-tour .track-meta strong{font-family:'Big Shoulders Display',sans-serif;font-weight:900;letter-spacing:.04em;font-size:1.05rem}
+.theme-neon-tour .track-meta span{color:#d9d9d9;opacity:1}
+.theme-neon-tour :is(.drawer,.theme-drawer,.crew-drawer,.mobile-nav-sheet){background:#0a0a0a;color:#fff;border-left:2px solid var(--nn-green);box-shadow:-10px 0 40px #56ff1822}
+.theme-neon-tour .drawer-head span{color:var(--nn-green)}
+.theme-neon-tour .crew-card-rich{background:var(--nn-panel-2);border:1px solid #ffffff1f;border-radius:14px}
+.theme-neon-tour :is(.crew-filters button,.crew-card-actions button,.crew-card-actions a){border-radius:999px}
+.theme-neon-tour .crew-manifesto{background:var(--nn-pink);color:#000;border:0;border-radius:14px}
+.theme-neon-tour .crew-manifesto p{opacity:1}
+
+@media(max-width:860px){
+  .theme-neon-tour .hero-art{min-height:380px}
+  .theme-neon-tour .poster-main{inset:4%}
+  .nn-head:nth-child(n+6){display:none}
+  .nn-lasers{bottom:12vh}
+  .nn-crowd{height:16vh;min-height:110px}
+}
+@media(prefers-reduced-motion:reduce){.nn-haze,.nn-beam,.nn-lasers i{animation:none}}

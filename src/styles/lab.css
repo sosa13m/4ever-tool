@@ -1,0 +1,49 @@
+/* 4EVER LAB. Built on the shared tool classes so every theme dresses it. */
+.lab-loading{padding:4rem 1rem;text-align:center;font-weight:800;letter-spacing:.16em}
+.lab-open{margin:1.6rem auto 1.2rem;display:inline-flex}
+.from-lab{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;background:var(--accent);color:var(--on-accent,#0b0b0b);opacity:1!important;font-weight:800}
+
+/* waveform + selection */
+.lab-wave{margin-top:1rem}
+.lab-wave-surface{position:relative;touch-action:none;cursor:crosshair;user-select:none}
+.lab-wave-surface canvas{display:block;width:100%;height:150px}
+.lab-handle{position:absolute;top:0;bottom:0;width:3px;background:var(--accent);transform:translateX(-50%);pointer-events:none;box-shadow:0 0 0 1px #0008}
+.lab-handle::after{content:'';position:absolute;top:0;left:50%;width:16px;height:16px;transform:translateX(-50%);background:var(--accent);border:2px solid #0b0b0b;border-radius:3px}
+.lab-handle.end::after{top:auto;bottom:0}
+.lab-selection{display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px;padding:12px 4px 4px}
+.lab-selection label,.lab-target{display:inline-flex;align-items:center;gap:8px;font-size:.66rem;font-weight:800;letter-spacing:.12em}
+.lab-selection input,.lab-target input{width:92px;padding:7px 8px;border:2px solid currentColor;background:transparent;color:inherit;font:inherit;font-size:.85rem;letter-spacing:0}
+.lab-selection>span{display:inline-flex;align-items:center;gap:6px;font-size:.66rem;font-weight:800;letter-spacing:.12em}
+.lab-selection .text-button{color:inherit;font-size:.66rem;font-weight:800;letter-spacing:.12em}
+
+/* controls */
+.lab-controls{margin-top:1rem}
+.lab-controls .option{display:flex;flex-direction:column;gap:12px;min-width:0}
+.lab-controls .option>div{margin-top:0}
+.lab-slider{width:100%;accent-color:var(--accent);height:28px;cursor:pointer}
+.lab-mode{display:flex;flex-wrap:wrap;gap:8px}
+.lab-mode button{display:inline-flex;align-items:center;gap:6px}
+
+/* forecast: what the result will be */
+.lab-forecast{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;margin:16px 0;border:1px solid color-mix(in srgb,currentColor 30%,transparent);background:color-mix(in srgb,currentColor 30%,transparent)}
+.lab-forecast>div{padding:12px 14px;background:var(--lab-cell,color-mix(in srgb,var(--accent) 8%,#0b0b0f));color:#f4f4f4;min-width:0}
+.lab-forecast small{display:block;font-size:.6rem;font-weight:800;letter-spacing:.16em;opacity:.8}
+.lab-forecast strong{display:block;margin-top:6px;font-size:1.25rem;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lab-forecast em{display:block;margin-top:4px;font-style:normal;font-size:.62rem;letter-spacing:.1em;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* result */
+.lab-result{grid-template-columns:1fr!important}
+.lab-result.is-stale{border-style:dashed}
+.lab-result em{font-style:normal;font-size:.62rem;letter-spacing:.12em;color:#ff4e61;font-weight:800;margin-top:4px}
+.lab-audio{width:100%;height:40px}
+.lab-export{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.lab-export .option{border:0;padding:0;background:none;box-shadow:none}
+.lab-export .option>div{margin-top:0}
+.lab-export .text-button{display:inline-flex;align-items:center;gap:6px;color:inherit;font-weight:800;letter-spacing:.12em}
+
+@media(max-width:720px){
+  .lab-forecast{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tool-tabs.tool-tabs-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+  .tool-tabs.tool-tabs-3 button{font-size:.6rem;padding:.7rem .3rem;justify-content:center;text-align:center;line-height:1.15}
+  .tool-tabs.tool-tabs-3 button svg{display:none}
+}

@@ -1,0 +1,12 @@
+FOTOS DEL COLECTIVO
+===================
+Pon aquí la foto o avatar de cada integrante con su id como nombre de archivo:
+
+  moneynlust.webp   cinho.webp   rani.webp   agus.webp   aletsandrr.webp
+  dj-chupalito.webp maxoxo.webp  hueviti.webp anderratedasf.webp mundane.webp
+
+También sirve .jpg, .jpeg, .png o .avif. Cuadrada, mínimo 600x600, idealmente menos de 300 KB
+(.webp es lo más liviano). No hay que tocar código: la web la encuentra sola al hacer npm run dev / build.
+
+Sin foto, la web usa el avatar de SoundCloud del integrante (se guarda solo cada vez que se construye la web,
+en src/data/avatars.json) y, si no hay, el sigilo generado. Cuando pongas su foto aqui, la foto manda.

@@ -1,0 +1,215 @@
+/* =========================================================================
+   LINEA 4 EVER · subway graffiti (theme id: purple-subway)
+   Palette: night #0b0910 · dirty tile #26222e / #1c1922 · steel #a6a6b2
+            spray purple #7c4dff · lilac #c9b3ff · lime #d4ff3a · pink #ff5fb8
+            board amber #ffb000 · platform yellow #f2c230
+   Type:    Sedgwick Ave Display (tags, pieces, headlines) · Bungee (signs, buttons) · Inter (text)
+   ========================================================================= */
+
+.theme-purple-subway{--pl-line:#7c4dff;--pl-line-light:#c9b3ff;--l4-lime:#d4ff3a;--l4-pink:#ff5fb8;--pl-panel:#17151d;--pl-panel-2:#211e29;--pl-amber:#ffb000;--pl-yellow:#f2c230;
+  --l4-drips:linear-gradient(var(--drip,#7c4dff),var(--drip,#7c4dff)) 14% 0/4px 10px no-repeat,linear-gradient(var(--drip,#7c4dff),var(--drip,#7c4dff)) 47% 0/3px 15px no-repeat,linear-gradient(var(--drip,#7c4dff),var(--drip,#7c4dff)) 83% 0/4px 7px no-repeat;
+  color:#fff;font-family:'Inter','Helvetica Neue',Arial,sans-serif;background:#0b0910}
+.theme-purple-subway::before{background:#0b0910!important}
+.theme-purple-subway ::selection{background:var(--pl-line);color:#fff}
+.theme-purple-subway :is(.floating-stickers,.maximal-world,.ambient,.scanlines){display:none}
+.theme-purple-subway .noise{opacity:.07;mix-blend-mode:screen}
+
+/* ---------- world: dirty tiles, tags, throw-ups, the bombed train ---------- */
+.transit-world{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden;background:#0b0910}
+.l4-tiles{position:absolute;left:0;right:0;top:0;height:72vh;background:
+  linear-gradient(90deg,#00000059 0 1px,transparent 1px) 0 0/72px 36px,
+  linear-gradient(0deg,#00000059 0 1px,transparent 1px) 0 0/72px 36px,
+  linear-gradient(90deg,transparent 0 50%,#ffffff05 50%) 0 0/144px 72px,
+  linear-gradient(180deg,#2c2836,#221e2b 60%,#16131c)}
+.l4-grime{position:absolute;left:0;right:0;top:0;height:72vh;background:
+  radial-gradient(ellipse at 20% 10%,#ffd9a01a,transparent 40%),radial-gradient(ellipse at 80% 0,#ffd9a014,transparent 35%),
+  linear-gradient(180deg,transparent 60%,#0b0910 100%),
+  repeating-linear-gradient(180deg,transparent 0 120px,#0000001f 120px 124px)}
+.l4-tags span{position:absolute;font:400 1em/1 'Sedgwick Ave Display','Permanent Marker','Comic Sans MS',cursive;white-space:nowrap;opacity:.5;text-shadow:0 0 1px #000a;transform-origin:left center}
+.l4-tags span.drip::after{content:'';position:absolute;left:10%;right:20%;top:82%;height:.5em;background:linear-gradient(currentColor,currentColor) 10% 0/2px 70% no-repeat,linear-gradient(currentColor,currentColor) 60% 0/2px 100% no-repeat,linear-gradient(currentColor,currentColor) 90% 0/2px 45% no-repeat;opacity:.8}
+.l4-throwup{position:absolute;font:400 clamp(4rem,9vw,8rem)/1 'Sedgwick Ave Display','Permanent Marker',cursive;letter-spacing:-.02em;paint-order:stroke fill;-webkit-text-stroke:10px #0b0910;text-shadow:6px 6px 0 #0b0910}
+.l4-throwup-a{right:3vw;top:46vh;color:#e6e6ee;transform:rotate(-8deg);opacity:.35}
+.l4-throwup-b{left:2vw;top:44vh;color:var(--pl-line);transform:rotate(6deg);opacity:.4}
+.l4-sign{position:absolute;left:3vw;top:3vh;display:flex;align-items:center;gap:.6rem;padding:.55rem .9rem .55rem .55rem;background:#050505;border:2px solid #f2f2f2;border-radius:6px;box-shadow:0 6px 0 #0008}
+.l4-sign b{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--pl-line);font:400 1rem/1 'Bungee',Impact,sans-serif}
+.l4-sign span{font:400 .95rem/1 'Bungee',Impact,sans-serif;letter-spacing:.06em}
+.l4-train{position:absolute;left:0;bottom:22px;width:140vw;max-width:2400px;height:27vh;min-height:170px;animation:l4-arrive 3.2s cubic-bezier(.2,.75,.25,1) both}
+.l4-train.still{animation:none}
+@keyframes l4-arrive{from{transform:translateX(60vw)}to{transform:translateX(0)}}
+.l4-car-number{font:400 34px/1 'Bungee',Impact,sans-serif;fill:#fff}
+.l4-piece-shadow,.l4-piece-fill,.l4-piece-shine{font:400 150px/1 'Sedgwick Ave Display','Permanent Marker',cursive;letter-spacing:-4px}
+.l4-piece-shadow{fill:#2a0f66;stroke:#0a0a0d;stroke-width:14px;paint-order:stroke fill}
+.l4-piece-fill{fill:url(#l4-paint);stroke:#0a0a0d;stroke-width:7px;paint-order:stroke fill}
+.l4-piece-shine{fill:none;stroke:#ffffffb3;stroke-width:2px;stroke-dasharray:6 22}
+.l4-piece-tag{font:400 34px/1 'Sedgwick Ave Display','Permanent Marker',cursive;fill:#0b0910}
+.pl-edge{position:absolute;left:0;right:0;bottom:0;height:22px;overflow:hidden;background:repeating-linear-gradient(90deg,var(--pl-yellow) 0 18px,#d6a91e 18px 20px);opacity:.85}
+.pl-edge span{display:block;white-space:nowrap;font:400 10px/22px 'Bungee',Impact,sans-serif;letter-spacing:.2em;color:#000;animation:pl-ticker 40s linear infinite}
+@keyframes pl-ticker{to{transform:translateX(-50%)}}
+/* Once inside, the wall steps back so the tools read first. */
+.theme-purple-subway:has(.gate) .l4-train{opacity:.7}
+.theme-purple-subway:has(.shell) :is(.l4-tags,.l4-throwup){opacity:.22}
+.theme-purple-subway:has(.shell) .l4-sign{display:none}
+.theme-purple-subway:has(.shell) .l4-train{opacity:.4}
+@media (max-width:760px){.l4-tags span.long,.l4-tags span:nth-child(n+9),.l4-throwup,.l4-sign{display:none}.l4-tags span{font-size:20px!important;opacity:.35}.l4-train{height:20vh;min-height:130px}.theme-purple-subway:has(.gate) .l4-train{opacity:.35}.theme-purple-subway .hero::before{display:none}.theme-purple-subway :is(.gate-subline,.hero-copy>p){font-size:.92rem;line-height:1.5}}
+
+/* ---------- header ---------- */
+.theme-purple-subway .header{background:#050505f2;border-bottom:3px solid var(--pl-line);box-shadow:0 8px 24px #000a;backdrop-filter:none}
+.theme-purple-subway .brand-button img{filter:drop-shadow(0 4px 0 #000)}
+.theme-purple-subway .desktop-nav button{position:relative;font:400 .82rem/1 'Bungee',Impact,sans-serif;letter-spacing:.04em;color:#fff;border-radius:0;padding:.65rem .8rem;text-transform:uppercase}
+.theme-purple-subway .desktop-nav button:hover{color:var(--pl-line-light)}
+.theme-purple-subway .desktop-nav button.active{background:none;color:#fff}
+.theme-purple-subway .desktop-nav button.active::after{content:'';position:absolute;left:.6rem;right:.6rem;bottom:.15rem;height:5px;border-radius:3px;background:var(--pl-line);box-shadow:0 0 10px #7c4dffaa}
+.theme-purple-subway .theme-badge{background:#000;color:#fff;border:2px solid var(--pl-line);border-radius:4px;font:400 .66rem/1 'Bungee',Impact,sans-serif;letter-spacing:.04em}
+.theme-purple-subway .theme-badge i{background:var(--l4-lime);border-radius:50%}
+.theme-purple-subway .icon-button{background:#17151d;color:#fff;border:2px solid #ffffff40;border-radius:8px}
+.theme-purple-subway .icon-button:hover{background:var(--pl-line);border-color:var(--pl-line)}
+
+/* ---------- type: pieces and tags ---------- */
+.theme-purple-subway :is(.gate h1,.hero h1,.tool-heading h2,.lab-teaser h2,.drawer-head h2){font-family:'Sedgwick Ave Display','Permanent Marker',cursive;font-weight:400;letter-spacing:0;text-transform:none;paint-order:stroke fill;-webkit-text-stroke:0}
+.theme-purple-subway :is(.gate h1,.hero h1){color:#fff;text-shadow:3px 3px 0 #0b0910,6px 6px 0 var(--pl-line),9px 9px 0 #0b0910}
+
+/* ---------- gate: the station entrance ---------- */
+.theme-purple-subway .gate{background:transparent;color:#fff}
+.theme-purple-subway .gate-logo{max-height:170px;filter:drop-shadow(0 10px 0 #000)}
+.theme-purple-subway .gate .eyebrow{display:inline-flex;align-items:center;gap:.6rem;padding:.45rem .9rem .45rem .45rem;background:#050505;border:2px solid #fff;border-radius:6px;color:#fff;font:400 .7rem/1 'Bungee',Impact,sans-serif;letter-spacing:.06em}
+.theme-purple-subway .gate .eyebrow::before{content:'4';display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--pl-line)}
+.theme-purple-subway .gate h1{font-size:clamp(3.4rem,8.6vw,7.6rem);line-height:1}
+.theme-purple-subway :is(.gate-subline,.hero-copy>p){color:#f1edf8;font:500 1.02rem/1.6 'Inter',sans-serif;background:#0b0910d9;padding:.7rem .9rem;border-left:4px solid var(--pl-line)}
+.theme-purple-subway .lore-tag{color:var(--l4-lime);font-family:'Bungee',Impact,sans-serif;font-weight:400;letter-spacing:.08em;text-shadow:0 2px 0 #000}
+.theme-purple-subway .lore-next{color:#fff;font-family:'Bungee',Impact,sans-serif;font-weight:400}
+.theme-purple-subway .preload-console{background:#000;border:2px solid #ffffff33;border-radius:10px;box-shadow:0 20px 50px #000a;padding:16px 18px;font-family:'Space Mono',monospace}
+.theme-purple-subway .preload-console :is(span,strong){color:var(--pl-amber)}
+.theme-purple-subway :is(.analysis-progress,.preload-line){background:#2a2414;border:0;border-radius:3px;height:8px}
+.theme-purple-subway :is(.analysis-progress,.preload-line) i{background:repeating-linear-gradient(90deg,var(--pl-amber) 0 8px,transparent 8px 10px);border-radius:0}
+.theme-purple-subway .gate .text-button{color:#fff;font:400 .9rem/1 'Bungee',Impact,sans-serif;text-decoration:underline;text-decoration-color:var(--pl-line);text-decoration-thickness:3px;text-underline-offset:6px}
+.theme-purple-subway .theme-peek{color:#fff;font-family:'Inter',sans-serif;background:#0b0910cc;padding:.3rem .6rem;border-radius:4px}
+.theme-purple-subway .gate-note{color:#e6e1f0;font-family:'Inter',sans-serif;background:#0b0910cc;padding:2px 8px;opacity:1}
+.theme-purple-subway .gate-note b{color:#fff;background:var(--pl-line);padding:1px 5px;border-radius:3px}
+
+/* ---------- buttons: spray-paint with drips ---------- */
+.theme-purple-subway :is(.sticker-button,.massive-action,.player-button,.tool-tabs button,.option button,.converter-source-tabs button,.bpm-range button,.paste-button,.identity-strip button,.lab-open){
+  position:relative;overflow:visible;font:400 .82rem/1 'Bungee',Impact,sans-serif;letter-spacing:.04em;text-transform:uppercase;border-radius:14px 9px 16px 8px;transform:none;box-shadow:none}
+.theme-purple-subway :is(.sticker-button.primary,.massive-action,.player-button,.lab-open){background:var(--pl-line);color:#fff;border:3px solid #050505;text-shadow:0 2px 0 #2a0f66}
+.theme-purple-subway :is(.sticker-button.primary,.massive-action,.lab-open)::after{content:'';position:absolute;left:10%;right:10%;top:calc(100% - 1px);height:15px;background:var(--l4-drips);pointer-events:none;--drip:#7c4dff}
+.theme-purple-subway :is(.sticker-button.primary,.massive-action):hover:not(:disabled){background:#6a3cf0;transform:rotate(-1deg)}
+.theme-purple-subway .massive-action:disabled{background:#2a2540;color:#d6d0e6;text-shadow:none}
+.theme-purple-subway .massive-action:disabled::after{display:none}
+.theme-purple-subway .sticker-button.ghost{background:#f2f2f2;color:#0b0910;border:3px solid #050505}
+.theme-purple-subway .sticker-button.ghost::after{content:'';position:absolute;left:10%;right:10%;top:calc(100% - 1px);height:15px;background:var(--l4-drips);pointer-events:none;--drip:#f2f2f2}
+.theme-purple-subway :is(.tool-tabs button,.option button,.converter-source-tabs button,.bpm-range button,.paste-button){background:#24212c;color:#fff;border:2px solid #ffffff3d}
+.theme-purple-subway :is(.tool-tabs button.active,.option button.selected,.converter-source-tabs button.active,.bpm-range button.selected){background:var(--l4-lime);border-color:#050505;color:#0b0910}
+.theme-purple-subway :is(.tool-tabs button,.option button,.converter-source-tabs button,.bpm-range button):hover:not(:disabled):not(.active):not(.selected){border-color:#fff}
+.theme-purple-subway .option button:disabled{opacity:.4}
+.theme-purple-subway .text-button{color:#fff}
+
+/* ---------- hero ---------- */
+.theme-purple-subway .hero::before{content:'LINEA 4 · ALL CITY · KING OF THE LINE';font:400 .7rem/1 'Bungee',Impact,sans-serif;letter-spacing:.14em;color:#ffffff8c;opacity:1}
+.theme-purple-subway .tape{display:inline-flex;align-items:center;gap:.5rem;background:#050505;color:#fff;border:2px solid #fff;border-radius:6px;box-shadow:none;transform:none;font:400 .66rem/1 'Bungee',Impact,sans-serif;letter-spacing:.06em;padding:.4rem .8rem .4rem .4rem}
+.theme-purple-subway .tape::before{content:'4';display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--pl-line)}
+.theme-purple-subway .hero h1{font-size:clamp(3.4rem,7.6vw,7.2rem);line-height:1.02}
+.theme-purple-subway .hero h1 span{color:var(--l4-lime);-webkit-text-stroke:0;text-shadow:3px 3px 0 #0b0910,6px 6px 0 var(--l4-pink),9px 9px 0 #0b0910}
+.theme-purple-subway .theme-passport{position:relative;background:#f2f2f2;color:#0b0910;border:3px solid #050505;border-radius:4px;padding:14px 18px;transform:rotate(-2deg);box-shadow:5px 5px 0 #050505}
+.theme-purple-subway .theme-passport::before{content:'HELLO 4EVER';position:absolute;left:-3px;right:-3px;top:-3px;padding:4px 10px;background:var(--pl-line);color:#fff;font:400 .62rem/1 'Bungee',Impact,sans-serif;letter-spacing:.1em}
+.theme-purple-subway .theme-passport{padding-top:30px}
+.theme-purple-subway .theme-passport span{color:#3b3546}
+.theme-purple-subway .theme-passport strong{font-family:'Sedgwick Ave Display','Permanent Marker',cursive;font-weight:400;color:#0b0910}
+.theme-purple-subway .theme-passport em{color:#3b3546}
+.theme-purple-subway .hero-art{min-height:500px;transform:none!important}
+.theme-purple-subway .poster{border:0;box-shadow:none}
+.theme-purple-subway .poster-main{inset:6% 4% 8%;transform:rotate(1deg);background:
+  linear-gradient(90deg,#00000040 0 1px,transparent 1px) 0 0/48px 24px,linear-gradient(0deg,#00000040 0 1px,transparent 1px) 0 0/48px 24px,#2c2836;
+  color:#fff;border:4px solid #050505;border-radius:10px;justify-content:center;gap:1.2rem;padding:2rem 2rem 4.6rem;box-shadow:10px 10px 0 #050505;overflow:hidden}
+.theme-purple-subway .poster-main img{max-width:92%;filter:drop-shadow(0 6px 0 #000)}
+.theme-purple-subway .poster-main strong{font:400 clamp(1.8rem,3vw,2.8rem)/1 'Sedgwick Ave Display','Permanent Marker',cursive;color:#fff;text-shadow:3px 3px 0 var(--pl-line)}
+.theme-purple-subway .poster-main::after{content:'LINEA 4 EVER  ·  ALL CITY';position:absolute;left:0;right:0;bottom:0;padding:1rem 1.4rem;background:#050505;color:#fff;font:400 clamp(.75rem,1.1vw,.95rem)/1 'Bungee',Impact,sans-serif;letter-spacing:.1em;white-space:pre;border-top:6px solid var(--pl-line)}
+.theme-purple-subway :is(.poster-small,.sticker-round,.barcode){display:none}
+
+/* ---------- departures board ---------- */
+.pl-board{display:none}
+.theme-purple-subway .pl-board{position:relative;display:block;margin:1.4rem 0 1.2rem;max-width:640px;background:#000;border:3px solid #050505;outline:2px solid #ffffff2e;border-radius:10px;padding:12px;box-shadow:0 20px 40px #000a}
+.theme-purple-subway .pl-board::after{content:'4E';position:absolute;right:-14px;top:-22px;font:400 2.4rem/1 'Sedgwick Ave Display','Permanent Marker',cursive;color:var(--l4-lime);transform:rotate(12deg);text-shadow:2px 2px 0 #000;pointer-events:none}
+.pl-board-head{display:flex;align-items:center;gap:.7rem;padding:2px 4px 10px;border-bottom:1px solid #ffffff1f;font:700 .72rem/1 'Inter',sans-serif;letter-spacing:.1em;color:#cfc9de}
+.pl-board-head strong{color:#fff;font:400 .9rem/1 'Bungee',Impact,sans-serif;letter-spacing:.04em}
+.pl-board-head time{margin-left:auto;font:700 1rem/1 'Space Mono',monospace;color:var(--pl-amber)}
+.pl-bullet{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--pl-line);color:#fff;font:400 .9rem/1 'Bungee',Impact,sans-serif}
+.pl-board-cols,.pl-board-row{display:grid;grid-template-columns:5fr 13fr 1.6fr 9fr;gap:10px;align-items:center}
+.pl-board-cols{padding:8px 6px 4px;font:700 .6rem/1 'Inter',sans-serif;letter-spacing:.14em;color:#a7a1ba}
+.pl-board-row{width:100%;padding:5px 6px;border:0;border-radius:6px;background:none;color:var(--pl-amber);cursor:pointer;text-align:left}
+.pl-board-row:hover{background:#ffffff0d}
+.pl-board-row:focus-visible{outline:2px solid var(--pl-line-light);outline-offset:1px}
+.pl-cells{display:flex;gap:2px;min-width:0;overflow:hidden}
+.pl-cells i{position:relative;display:grid;place-items:center;flex:0 0 auto;width:clamp(12px,1.2vw,17px);height:clamp(20px,1.9vw,25px);background:linear-gradient(180deg,#1d1b20 0 49%,#0a090c 49% 51%,#16141a 51%);border-radius:2px;font:700 clamp(.66rem,1vw,.86rem)/1 'Space Mono',monospace;font-style:normal;color:var(--pl-amber)}
+.pl-cells i.blank{color:transparent}
+.pl-c-status i{color:#fff}
+.pl-board-row:hover .pl-c-dest i{color:#fff}
+
+/* ---------- identity strip: a slap sticker ---------- */
+.theme-purple-subway .identity-strip{background:#f2f2f2;color:#0b0910;border:3px solid #050505;border-radius:6px;box-shadow:5px 5px 0 #050505;font-family:'Bungee',Impact,sans-serif}
+.theme-purple-subway .identity-strip::after{content:'king of the line';color:var(--l4-lime);opacity:1;font:400 1rem/1 'Sedgwick Ave Display','Permanent Marker',cursive;letter-spacing:0;text-shadow:1px 1px 0 #000}
+.theme-purple-subway .identity-strip>*{border-color:#0000001f}
+.theme-purple-subway .identity-strip>span{background:var(--pl-line);color:#fff!important}
+.theme-purple-subway .identity-strip b{color:#0b0910}
+
+/* ---------- tools: train-car steel panels ---------- */
+.theme-purple-subway .tool-stage{background:transparent;border:0}
+.theme-purple-subway .tool-stage::before{content:'PLATFORM 1–3 · AUDIO';font-family:'Bungee',Impact,sans-serif;color:#ffffff73;opacity:1}
+.theme-purple-subway :is(.tool-card,.local-player,.conversion-console,.analysis-console){background:
+  repeating-linear-gradient(90deg,#ffffff06 0 2px,transparent 2px 26px),linear-gradient(180deg,#24222b,#17151d);
+  color:#fff;border:3px solid #050505;border-top:10px solid var(--pl-line);border-radius:12px;box-shadow:0 0 0 2px #ffffff1a,0 30px 60px #000a}
+.theme-purple-subway .tool-card::before{content:'4EVER';color:#fff;opacity:.04;font-family:'Sedgwick Ave Display','Permanent Marker',cursive;font-weight:400}
+.theme-purple-subway .tool-card::after{content:'L4E';position:absolute;right:18px;bottom:14px;font:400 1.6rem/1 'Sedgwick Ave Display','Permanent Marker',cursive;color:var(--pl-line-light);opacity:.55;transform:rotate(-8deg);pointer-events:none}
+.theme-purple-subway .tool-heading>span{display:grid;place-items:center;width:2.2em;height:2.2em;padding:0;background:var(--pl-line);color:#fff;border-radius:50%;font:400 .9rem/1 'Bungee',Impact,sans-serif;border:2px solid #fff}
+.theme-purple-subway .tool-heading p{color:#d6d0e6;font:400 .7rem/1.3 'Bungee',Impact,sans-serif;letter-spacing:.08em}
+.theme-purple-subway .tool-heading h2{font-size:clamp(2.6rem,5vw,4.4rem);color:#fff;text-shadow:3px 3px 0 #0b0910,5px 5px 0 var(--pl-line)}
+.theme-purple-subway :is(.url-field>span,.option>span){font:400 .66rem/1 'Bungee',Impact,sans-serif;letter-spacing:.06em;color:#d6d0e6;text-transform:uppercase}
+.theme-purple-subway .url-field input,.theme-purple-subway :is(.lab-selection input,.lab-target input){background:#fff;color:#0b0910;border:3px solid #050505;border-radius:8px;box-shadow:none;font:500 1rem 'Inter',sans-serif}
+.theme-purple-subway input::placeholder{color:#6b6577}
+.theme-purple-subway .url-field input:focus{outline:3px solid var(--l4-lime);outline-offset:2px}
+.theme-purple-subway .option{background:var(--pl-panel-2);border:2px solid #ffffff14;border-radius:10px}
+.theme-purple-subway :is(.converter-file-zone,.drop-zone){background:var(--pl-panel-2);border:3px dashed #ffffff4d;border-radius:12px;color:#fff;box-shadow:none}
+.theme-purple-subway :is(.converter-file-zone,.drop-zone):hover{border-color:var(--l4-lime)}
+.theme-purple-subway .drop-zone strong{font-family:'Sedgwick Ave Display','Permanent Marker',cursive;font-weight:400}
+.theme-purple-subway .source-badge{background:#000;color:#fff;border:2px solid #ffffff40;border-radius:6px}
+.theme-purple-subway .conversion-result{background:var(--pl-panel-2);border:0;border-left:6px solid var(--l4-lime);border-radius:10px;color:#fff}
+.theme-purple-subway .results-grid .metric{background:#000;color:#fff;border:2px solid #ffffff1f;border-radius:10px}
+.theme-purple-subway .results-grid .metric strong{font-family:'Space Mono',monospace;color:var(--pl-amber)}
+.theme-purple-subway .results-grid .metric span{color:#d6d0e6}
+.theme-purple-subway .alternative-keys{border:2px solid #ffffff26;border-radius:10px}
+.theme-purple-subway .tool-card :is(.legal-copy,.prototype-tag){color:#d6d0e6;opacity:1}
+.theme-purple-subway .tool-card .prototype-tag{border:2px solid #ffffff40;border-radius:6px}
+.theme-purple-subway .lab-forecast{--lab-cell:#000;border-radius:10px;overflow:hidden}
+.theme-purple-subway .conversion-history{border-color:#ffffff26;border-radius:12px}
+.theme-purple-subway :is(.lab-slider,.volume-slider){accent-color:var(--pl-line)}
+
+/* ---------- LAB teaser: a wall piece ---------- */
+.theme-purple-subway .lab-teaser{background:
+  linear-gradient(90deg,#00000052 0 1px,transparent 1px) 0 0/72px 36px,linear-gradient(0deg,#00000052 0 1px,transparent 1px) 0 0/72px 36px,linear-gradient(180deg,#2c2836,#1c1922);
+  color:#fff;border:4px solid #050505;border-radius:12px;padding:3rem 1.5rem 3.4rem;box-shadow:10px 10px 0 #050505}
+.theme-purple-subway .lab-teaser::before{content:'NEXT STOP';color:var(--l4-lime);opacity:1;font:400 .8rem/1 'Bungee',Impact,sans-serif;letter-spacing:.2em}
+.theme-purple-subway .lab-teaser>span{color:#fff;font:400 .8rem/1 'Bungee',Impact,sans-serif;letter-spacing:.1em}
+.theme-purple-subway .lab-teaser h2{font-size:clamp(3.6rem,10vw,8.6rem);color:var(--l4-lime);text-shadow:4px 4px 0 #0b0910,8px 8px 0 var(--pl-line),12px 12px 0 #0b0910}
+.theme-purple-subway .tool-cloud{color:#e6e1f0;font:600 .82rem/1.5 'Inter',sans-serif}
+
+/* ---------- radio, drawers ---------- */
+.theme-purple-subway .radio-bar{background:#050505;color:#fff;border-top:4px solid var(--pl-line);box-shadow:0 -10px 30px #000b}
+.theme-purple-subway .radio-status-chip{border-radius:6px;background:var(--l4-lime);color:#0b0910;font-family:'Bungee',Impact,sans-serif}
+.theme-purple-subway .track-meta strong{font-family:'Bungee',Impact,sans-serif;font-weight:400;letter-spacing:.02em}
+.theme-purple-subway .track-meta span{color:#d6d0e6;opacity:1}
+.theme-purple-subway :is(.drawer,.theme-drawer,.crew-drawer,.mobile-nav-sheet){background:#100e15;color:#fff;border-left:6px solid var(--pl-line)}
+.theme-purple-subway .drawer-head span{color:#d6d0e6}
+.theme-purple-subway .crew-card-rich{background:var(--pl-panel);border:2px solid #ffffff1a;border-radius:10px}
+.theme-purple-subway :is(.crew-filters button,.crew-card-actions button,.crew-card-actions a){border-radius:8px}
+.theme-purple-subway .crew-manifesto{background:var(--pl-line);color:#fff;border:0;border-radius:10px}
+.theme-purple-subway .crew-manifesto p{opacity:1}
+
+@media(max-width:860px){
+  .theme-purple-subway .hero-art{min-height:360px}
+  .theme-purple-subway .poster-main{inset:4%}
+  .l4-throwup-a{left:52vw;top:8vh}
+  .l4-tags span:nth-child(n+10){display:none}
+  .l4-train{height:26vh;min-height:170px;width:220vw}
+  .pl-board-cols,.pl-board-row{grid-template-columns:5fr 13fr 1.6fr;gap:6px}
+  .pl-board-cols span:last-child,.pl-c-status{display:none}
+  .pl-cells i{width:clamp(12px,3.6vw,17px);height:22px;font-size:.72rem}
+}
+@media(prefers-reduced-motion:reduce){.pl-edge span,.l4-train{animation:none}}

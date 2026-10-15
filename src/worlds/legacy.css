@@ -1,0 +1,170 @@
+/* =========================================================================
+   LEGACY LABEL WORLD
+   Mood of a classic leaf-wrap label site. Original 4EVER artwork only.
+   Palette: night #0e0707 · grain red #3a0b07 · charcoal #2a2626 / #1f1c1c
+            label red #d82314 · deep red #8e140b · leaf #6b3b1f → #24120b · cream #f2e6d0
+   Type:    Oswald (condensed headlines) · Archivo (UI)
+   ========================================================================= */
+
+.theme-legacy-label{--lg-red:#d82314;--lg-red-dark:#8e140b;--lg-char:#2a2626;--lg-char-2:#1f1c1c;--lg-cream:#f2e6d0;color:#fff;font-family:'Archivo','Helvetica Neue',Arial,sans-serif}
+.theme-legacy-label::before{background:#0e0707!important}
+.theme-legacy-label ::selection{background:var(--lg-red);color:#fff}
+.theme-legacy-label :is(.floating-stickers,.maximal-world,.ambient,.scanlines){display:none}
+.theme-legacy-label .noise{opacity:.06;mix-blend-mode:screen}
+
+/* ---------- world layer: flickering dark-red grain + leaf silhouettes ---------- */
+.legacy-world{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden}
+.lg-grain{position:absolute;inset:-20%;background-color:#120606;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55  0 0 0 0 .06  0 0 0 0 .03  0 0 0 1.6 -.55'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23g)'/%3E%3C/svg%3E");
+  animation:lg-flicker .9s steps(3) infinite}
+@keyframes lg-flicker{0%{transform:translate(0,0)}33%{transform:translate(-37px,23px)}66%{transform:translate(19px,-41px)}100%{transform:translate(0,0)}}
+.lg-vignette{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 35%,transparent 0,#0e0707b3 62%,#070303 100%)}
+.lg-leaf{position:absolute;width:clamp(180px,20vw,320px);opacity:.09}
+.lg-leaf path{fill:#6b3b1f}
+.lg-leaf .lg-vein{fill:none;stroke:#f2e6d0;stroke-width:2.5;stroke-linecap:round;opacity:.55}
+.lg-leaf-a{left:-4%;top:18%;transform:rotate(-24deg)}
+.lg-leaf-b{right:-3%;bottom:6%;transform:rotate(152deg)}
+
+/* ---------- header: black strip, warning label ---------- */
+.theme-legacy-label .header{background:#090505f2;border-bottom:1px solid #ffffff14;backdrop-filter:none}
+.theme-legacy-label .brand-button img{transform:scale(1.12);filter:drop-shadow(0 3px 0 #000)}
+.theme-legacy-label .desktop-nav button{font:700 .72rem/1 'Archivo',sans-serif;letter-spacing:.05em;color:#fff;border-radius:999px;padding:.6rem .85rem;text-transform:uppercase;white-space:nowrap}
+.theme-legacy-label .desktop-nav button:hover{background:#ffffff14}
+.theme-legacy-label .desktop-nav button.active{background:var(--lg-red);color:#fff}
+.theme-legacy-label .theme-badge{border:1px solid #ffffff40;border-radius:999px;background:#000;color:#fff;font-family:'Archivo',sans-serif}
+.theme-legacy-label .theme-badge i{background:var(--lg-red)}
+.theme-legacy-label .icon-button{border:1px solid #ffffff55;border-radius:999px;background:#0008;color:#fff}
+.theme-legacy-label .icon-button:hover{background:var(--lg-red);border-color:var(--lg-red)}
+.lg-warning{display:none}
+.theme-legacy-label .lg-warning{display:flex;flex-direction:column;justify-content:center;gap:2px;margin-left:auto;margin-right:1rem;max-width:230px;padding:5px 9px;background:#fff;color:#000;border:3px double #000;outline:2px solid #fff;font:10.5px/1.2 'Archivo',Arial,sans-serif}
+.theme-legacy-label .lg-warning b{font:800 11px/1 'Archivo',Arial,sans-serif;letter-spacing:.02em}
+@media(max-width:1360px){.theme-legacy-label .lg-warning{display:none}}
+
+/* ---------- gate: charcoal "log in" card on the grain ---------- */
+.theme-legacy-label .gate{background:transparent}
+.theme-legacy-label .gate::before{content:'4EVER GENERAL WARNING: Heavy 808s may cause repeated listening.';position:absolute;top:18px;right:18px;max-width:230px;padding:6px 10px;background:#fff;color:#000;border:3px double #000;outline:2px solid #fff;font:700 10px/1.25 'Archivo',Arial,sans-serif;text-align:left;pointer-events:none}
+.theme-legacy-label .gate-logo{max-height:190px;filter:drop-shadow(0 8px 0 #000)}
+.theme-legacy-label .gate .eyebrow{font:700 .7rem/1 'Archivo',sans-serif;letter-spacing:.2em;color:var(--lg-cream)}
+.theme-legacy-label :is(.gate h1,.hero h1,.tool-heading h2,.lab-teaser h2,.drawer-head h2){font-family:'Oswald','Arial Narrow',sans-serif;font-weight:700;letter-spacing:.01em;text-transform:none;text-shadow:none}
+.theme-legacy-label .gate h1{font-size:clamp(3rem,7vw,6rem);color:#fff}
+.theme-legacy-label .gate-subline{color:#f2e6d0e6;font-family:'Archivo',sans-serif}
+.theme-legacy-label .preload-console{background:var(--lg-char);border:0;border-radius:6px;box-shadow:0 30px 60px #0009;color:#fff;padding:18px 20px}
+.theme-legacy-label :is(.analysis-progress,.preload-line){background:#ffffff1f;border:0;border-radius:999px;overflow:hidden}
+.theme-legacy-label :is(.analysis-progress,.preload-line) i{background:var(--lg-red);border-radius:999px}
+.theme-legacy-label .gate .text-button{display:inline-flex;align-items:center;padding:.85rem 1.4rem;border:1px solid #fff;border-radius:999px;background:#00000080;color:#fff;font:800 .78rem/1 'Archivo',sans-serif;letter-spacing:.06em;text-decoration:none;text-transform:uppercase}
+.theme-legacy-label .theme-peek{color:#fff;font-family:'Archivo',sans-serif}
+.theme-legacy-label .gate-note{color:var(--lg-cream);opacity:1}
+
+/* ---------- buttons: red pills ---------- */
+.theme-legacy-label :is(.sticker-button,.massive-action,.player-button,.tool-tabs button,.option button,.converter-source-tabs button,.bpm-range button,.paste-button){border-radius:999px;box-shadow:none;transform:none;font-family:'Archivo',sans-serif;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
+.theme-legacy-label :is(.sticker-button.primary,.massive-action,.player-button){background:var(--lg-red);border:1px solid var(--lg-red);color:#fff}
+.theme-legacy-label :is(.sticker-button.primary,.massive-action):hover:not(:disabled){background:#ef2a18;border-color:#ef2a18}
+.theme-legacy-label .massive-action:disabled{background:#4a2420;border-color:#4a2420;color:#ffffffa6}
+.theme-legacy-label .sticker-button.ghost{background:#00000080;border:1px solid #fff;color:#fff}
+.theme-legacy-label :is(.tool-tabs button,.option button,.converter-source-tabs button,.bpm-range button){background:transparent;border:1px solid #ffffff59;color:#fff}
+.theme-legacy-label :is(.tool-tabs button.active,.option button.selected,.converter-source-tabs button.active,.bpm-range button.selected){background:var(--lg-red);border-color:var(--lg-red);color:#fff}
+.theme-legacy-label :is(.tool-tabs button,.option button,.converter-source-tabs button,.bpm-range button):hover:not(:disabled):not(.active):not(.selected){border-color:#fff;background:#ffffff12}
+.theme-legacy-label .option button:disabled{opacity:.4}
+.theme-legacy-label .text-button{color:#fff}
+
+/* ---------- hero: cured-leaf panel + charcoal card ---------- */
+.theme-legacy-label .hero{position:relative;margin-top:2.5rem;padding:4rem clamp(1.5rem,4vw,4rem);border-radius:6px;overflow:hidden;min-height:620px;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='%23f2e6d0' stroke-linecap='round' opacity='.13'%3E%3Cpath d='M-20 520 C200 420 420 300 820 60' stroke-width='5'/%3E%3Cpath d='M150 440 C150 360 190 280 250 230M300 360 C320 280 380 200 440 160M460 280 C490 200 540 140 610 100M120 460 C60 420 20 400 -20 400M290 370 C230 360 170 380 110 420M450 290 C390 300 330 330 270 380M610 190 C560 210 510 240 460 280' stroke-width='2'/%3E%3C/g%3E%3C/svg%3E") center/cover no-repeat,
+    repeating-linear-gradient(118deg,#00000026 0 2px,transparent 2px 34px),
+    repeating-linear-gradient(28deg,#f2e6d00d 0 1px,transparent 1px 19px),
+    radial-gradient(ellipse at 28% 35%,#b7703a66,transparent 58%),
+    linear-gradient(135deg,#6b3b1f,#3d2012 48%,#1c0e08)}
+.theme-legacy-label .hero::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#0b0505d9 0,#0b050566 46%,transparent 70%);pointer-events:none}
+.theme-legacy-label .hero>*{position:relative;z-index:1}
+.theme-legacy-label .tape{background:#000;color:#fff;border-radius:999px;box-shadow:none;font:700 .66rem/1 'Archivo',sans-serif;letter-spacing:.14em;padding:.55rem .9rem;transform:none}
+.theme-legacy-label .hero h1{font-size:clamp(3.6rem,7.4vw,7.2rem);line-height:.92;color:#fff}
+.theme-legacy-label .hero h1 span{color:#fff;-webkit-text-stroke:0;text-shadow:none}
+.theme-legacy-label .hero-copy>p{color:#fff;max-width:520px;font:500 1rem/1.6 'Archivo',sans-serif}
+.theme-legacy-label .theme-passport{background:#000000a6;border:0;border-radius:6px;transform:none}
+.theme-legacy-label .theme-passport span{color:var(--lg-cream)}
+.theme-legacy-label .theme-passport strong{font-family:'Oswald',sans-serif;color:#fff}
+.theme-legacy-label .hero-art{min-height:480px;transform:none!important}
+.theme-legacy-label .poster{border:0;box-shadow:none}
+.theme-legacy-label .poster-main{inset:4% 2% 4% 4%;transform:none;background:var(--lg-char);border-radius:6px;box-shadow:0 34px 70px #000b;color:#fff;justify-content:center;gap:1.6rem;overflow:hidden}
+.theme-legacy-label .poster-main img{max-width:88%;filter:drop-shadow(0 6px 0 #000)}
+.theme-legacy-label .poster-main strong{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(1.8rem,3vw,2.8rem);line-height:1.02;color:#fff;text-transform:uppercase}
+.theme-legacy-label .poster-main::after{content:'ORIGINAL SINCE DAY ONE';position:absolute;left:0;right:0;bottom:0;padding:1.1rem 1.6rem;background:var(--lg-red);color:#fff;font:700 clamp(1rem,1.6vw,1.35rem)/1 'Oswald',sans-serif;letter-spacing:.02em;white-space:pre}
+.theme-legacy-label :is(.poster-small,.sticker-round,.barcode){display:none}
+
+/* ---------- identity strip, tool stage ---------- */
+.theme-legacy-label .identity-strip{background:#000;border:0;border-radius:6px;color:#fff;box-shadow:none}
+.theme-legacy-label .identity-strip>*{border-color:#ffffff1f}
+.theme-legacy-label .identity-strip>span{color:#fff!important}
+.theme-legacy-label .identity-strip button{border-radius:999px;background:var(--lg-red);color:#fff;border:0}
+.theme-legacy-label .tool-stage{background:transparent;border:0}
+.theme-legacy-label :is(.tool-card,.local-player,.conversion-console,.analysis-console){background:var(--lg-char);color:#fff;border:0;border-radius:6px;box-shadow:0 30px 60px #0008}
+.theme-legacy-label .tool-card::before{color:#fff;opacity:.03}
+.theme-legacy-label .tool-heading>span{background:var(--lg-red);color:#fff;border-radius:999px}
+.theme-legacy-label .tool-heading p{color:var(--lg-cream);font-family:'Archivo',sans-serif;font-weight:800}
+.theme-legacy-label .tool-heading h2{font-size:clamp(2.6rem,5vw,4.4rem);color:#fff;text-transform:uppercase}
+.theme-legacy-label :is(.url-field>span,.option>span){font:800 .8rem/1 'Archivo',sans-serif;letter-spacing:.02em;color:#fff;text-transform:none}
+.theme-legacy-label .url-field input,.theme-legacy-label :is(.lab-selection input,.lab-target input){background:#fff;color:#111;border:0;border-radius:5px;box-shadow:none;font-family:'Archivo',sans-serif;font-weight:500}
+.theme-legacy-label .url-field input:focus{outline:3px solid var(--lg-red);outline-offset:1px}
+.theme-legacy-label .option{background:var(--lg-char-2);border:0;border-radius:6px}
+.theme-legacy-label :is(.converter-file-zone,.drop-zone){background:var(--lg-char-2);border:2px dashed #ffffff4d;border-radius:6px;color:#fff;box-shadow:none}
+.theme-legacy-label :is(.converter-file-zone,.drop-zone):hover{border-color:var(--lg-red)}
+.theme-legacy-label .drop-zone strong{font-family:'Oswald',sans-serif;font-weight:700}
+.theme-legacy-label .source-badge{border-radius:999px;color:#fff;background:#ffffff14;border-color:#ffffff40}
+.theme-legacy-label .conversion-result{background:var(--lg-char-2);border:0;border-radius:6px;box-shadow:none;border-left:6px solid var(--lg-red)}
+.theme-legacy-label .results-grid .metric{background:var(--lg-char-2);border:0;border-radius:6px;color:#fff}
+.theme-legacy-label .results-grid .metric strong{font-family:'Oswald',sans-serif;color:#fff;border-bottom:4px solid var(--lg-red);display:inline-block}
+.theme-legacy-label .alternative-keys{border:1px solid #ffffff2e;border-radius:6px}
+.theme-legacy-label .tool-card .legal-copy{color:#f2e6d0d9}
+.theme-legacy-label .tool-card .prototype-tag{color:#fff;border:1px solid #ffffff40;border-radius:999px}
+.theme-legacy-label .lab-forecast{border-radius:6px;overflow:hidden;--lab-cell:#1f1c1c}
+.theme-legacy-label .conversion-history{border-color:#ffffff33;border-radius:6px}
+
+/* ---------- LAB teaser: the red "need an account?" band ---------- */
+.theme-legacy-label .lab-teaser{background:var(--lg-char);border:0;border-radius:6px;padding:3.2rem 1.5rem;margin-bottom:0;box-shadow:0 30px 60px #0008}
+.theme-legacy-label .lab-teaser::before{display:none}
+.theme-legacy-label .lab-teaser h2{color:#fff;text-shadow:none;font-size:clamp(3rem,8vw,7rem);text-transform:uppercase}
+.theme-legacy-label .lab-teaser>span{color:#fff}
+.theme-legacy-label .lab-teaser>span{color:var(--lg-cream)}
+.theme-legacy-label .lab-teaser .lab-open{background:var(--lg-red);border:1px solid var(--lg-red);color:#fff}
+.theme-legacy-label .tool-cloud{color:#fff}
+
+/* ---------- red footer with arched emblem ---------- */
+.lg-footer{display:none}
+.theme-legacy-label .lg-footer{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:2rem;margin:3rem 0 7rem;padding:2rem clamp(1.2rem,3vw,2.6rem);background:var(--lg-red);border-radius:6px;color:#fff}
+.lg-footer nav{display:flex;flex-direction:column;align-items:flex-start;gap:.6rem}
+.lg-footer nav button{border:0;background:none;color:#fff;font:600 .9rem/1.2 'Archivo',sans-serif;cursor:pointer;padding:0}
+.lg-footer nav button:hover{text-decoration:underline}
+.lg-emblem{width:200px}
+.lg-emblem text{fill:#fff;font-family:'Oswald',sans-serif;font-weight:700}
+.lg-emblem-arc{font-size:30px;letter-spacing:.08em}
+.lg-emblem-main{font-size:58px;letter-spacing:.02em;paint-order:stroke;stroke:#8e140b;stroke-width:6px}
+.lg-footer p{justify-self:end;text-align:right;margin:0;font:500 .85rem/1.5 'Archivo',sans-serif}
+
+/* ---------- radio, drawers, menus ---------- */
+.theme-legacy-label .radio-bar{background:#070404f5;border-top:3px solid var(--lg-red);color:#fff}
+.theme-legacy-label .radio-status-chip{border-radius:999px}
+.theme-legacy-label .volume-slider{accent-color:var(--lg-red)}
+.theme-legacy-label :is(.drawer,.theme-drawer,.crew-drawer,.mobile-nav-sheet){background:#151111;color:#fff;border-left:4px solid var(--lg-red)}
+.theme-legacy-label .crew-card-rich{background:var(--lg-char);border:0;border-radius:6px}
+.theme-legacy-label :is(.crew-filters button,.crew-card-actions button,.crew-card-actions a){border-radius:999px}
+.theme-legacy-label .crew-manifesto{background:var(--lg-red);border-left:0;border-radius:6px}
+.theme-legacy-label .crew-manifesto p{opacity:1}
+.theme-card-legacy-label img{transform:scale(1.16)}
+.theme-card-legacy-label:hover img{transform:scale(1.22) rotate(-.6deg)}
+
+/* ---------- mobile ---------- */
+@media(max-width:860px){
+  .theme-legacy-label .hero{margin-top:1rem;padding:2.4rem 1.2rem;min-height:auto}
+  .theme-legacy-label .hero::after{background:linear-gradient(180deg,#0b0505cc,#0b050540)}
+  .theme-legacy-label .hero-art{min-height:360px}
+  .theme-legacy-label .lg-footer{grid-template-columns:1fr;text-align:center;justify-items:center}
+  .theme-legacy-label .lg-footer nav{align-items:center}
+  .theme-legacy-label .lg-footer p{justify-self:center;text-align:center}
+  .theme-legacy-label .gate::before{position:static;display:block;margin:0 auto 1rem}
+}
+@media(prefers-reduced-motion:reduce){.lg-grain{animation:none}}
+.theme-legacy-label .drawer-head span{color:var(--lg-cream)}
+
+/* the loading numbers read on the dark console */
+.theme-legacy-label .preload-console strong{color:#ff6a5c}

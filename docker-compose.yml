@@ -1,0 +1,14 @@
+services:
+  api:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      MAX_SOURCE_BYTES: "262144000"
+      FILE_TTL_SECONDS: "3600"
+      YTDLP_ENABLED: "true"
+      YTDLP_MAX_DURATION_SECONDS: "1200"
+    volumes:
+      - converter_storage:/app/storage
+volumes:
+  converter_storage:

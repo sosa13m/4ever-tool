@@ -1,0 +1,90 @@
+/* =========================================================================
+   IDENTITY SYSTEM
+   One sizing rule per logo slot instead of per-theme scale() patches.
+
+   Every logo file is trimmed to its visible ink (+2% margin) and each theme
+   publishes --logo-sqrt-ar = √(width / height). A slot sizes logos by AREA:
+       width = unit × √ratio   →   height = unit / √ratio
+   so a wide wordmark (#4EVER, ratio 3.8) and a compact badge (4ever, 1.5)
+   carry the same visual weight.
+   ========================================================================= */
+
+.app{--logo-sqrt-ar:1.6}
+
+/* ---------- gate (entry screen) ---------- */
+.app .gate-logo{
+  width:min(calc(var(--gate-logo-unit,290px) * var(--logo-sqrt-ar)),86vw,640px);
+  height:auto;max-height:none;object-fit:contain;
+}
+@media (max-width:700px){.app{--gate-logo-unit:215px}}
+
+/* ---------- header brand ---------- */
+.app .brand-button{display:flex;align-items:center;justify-content:flex-start;min-width:0}
+.app .brand-button img{
+  width:min(100%,calc(var(--brand-logo-unit,104px) * var(--logo-sqrt-ar)));
+  height:auto;max-height:100%;max-width:100%;object-fit:contain;
+  transform:none!important;transform-origin:center left;transition:transform .35s cubic-bezier(.34,1.6,.5,1)
+}
+.app .brand-button:hover img{transform:scale(1.05) rotate(-1.5deg)!important}
+
+/* ---------- hero poster ---------- */
+.app .poster-main img{
+  width:min(100%,calc(var(--poster-logo-unit,232px) * var(--logo-sqrt-ar)));
+  height:auto;max-height:58%;max-width:100%;object-fit:contain;align-self:center;
+  transform:none!important
+}
+
+/* ---------- theme archive cards ---------- */
+.app .theme-card img{
+  justify-self:center;
+  width:min(100%,calc(var(--card-logo-unit,82px) * var(--logo-sqrt-ar)));
+  height:auto;max-height:96px;object-fit:contain;
+  transform:none!important;transition:transform .35s cubic-bezier(.34,1.6,.5,1)
+}
+.app .theme-card:hover img{transform:scale(1.07) rotate(-.6deg)!important}
+
+/* ---------- hero poster contrast ----------
+   The stamp used --ink, which is near-black in every theme — invisible on the
+   dark posters of Purple Line and Neon OG. Dark posters use paper colour. */
+
+/* ---------- contrast pass (measured with a pixel-based WCAG audit) ---------- */
+/* Labels painted on the accent colour pick black/white automatically. */
+.app .identity-strip>span{color:var(--on-accent)!important}
+
+/* Small labels inside light tool cards inherited light "paper" text. */
+.theme-comic-hit .tool-card .legal-copy{color:#4a4a4a}
+.theme-comic-hit .tool-card .prototype-tag{color:#171717}
+
+.theme-aqua-cartoon .tool-card :is(.tool-heading p,.url-field>span){color:#0b5f9a}
+
+/* 4EVER LAB tool list was nearly invisible on several themes
+   (lab panel is light on Red, Purple, Neon, Comic and Aero; dark on Legacy). */
+
+.theme-comic-hit .tool-cloud{color:#171717}
+
+/* Aqua's drawer is light but the cards keep each theme's dark surface as a preview. */
+.theme-aqua-cartoon .theme-card{color:#eaffff}
+
+/* Secret Aero: deepen the blues a notch on the bright sky. */
+
+/* =========================================================================
+   ARCHIVE (Theme drawer)
+   ========================================================================= */
+.archive-section{margin-top:1.4rem;border-top:1px dashed currentColor;padding-top:1.1rem}
+.archive-section>header{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:.8rem}
+.archive-section>header span{font-size:.62rem;letter-spacing:.18em;opacity:.65}
+.archive-section>header strong{font-size:.78rem;letter-spacing:.14em}
+
+.heritage-details{margin-top:.9rem}
+.heritage-details summary{cursor:pointer;font-size:.7rem;letter-spacing:.14em;padding:.6rem 0;list-style:none}
+.heritage-details summary::-webkit-details-marker{display:none}
+.heritage-details summary::before{content:'▸ ';display:inline-block;transition:transform .2s ease}
+.heritage-details[open] summary::before{transform:rotate(90deg)}
+.heritage-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.5rem}
+.heritage-grid figure{margin:0;display:grid;grid-template-rows:56px auto;gap:.35rem;padding:.55rem;background:#0000003d;border:1px solid #ffffff1f}
+.heritage-grid img{width:100%;height:56px;object-fit:contain}
+.heritage-grid figcaption{font-size:.55rem;line-height:1.35;letter-spacing:.06em}
+.heritage-grid figcaption small{display:block;opacity:.55}
+
+/* contrast found by the converter audit */
+
