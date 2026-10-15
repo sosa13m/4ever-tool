@@ -13,7 +13,11 @@
  *  - the volume applied to every new track is the CURRENT volume;
  *  - a track that never starts (deleted, private, geo-blocked) is skipped;
  *  - every track enters the shuffle, including catalogs that load late or
- *    grow after the first read; no artist plays twice in a row if avoidable.
+ *    grow after the first read; no artist plays twice in a row if avoidable;
+ *  - a pause we did not ask for right after a track change (SoundCloud pauses
+ *    every other widget when one starts) is undone, so the radio keeps going;
+ *  - in a background tab the next track stays in the same widget, because
+ *    browsers may not let a different player start while the tab is hidden.
  */
 
 export type RadioMember = { id: string; name: string; alias?: string; profileUrl: string }
@@ -75,7 +79,15 @@ export type RadioOptions = {
   catalogRefreshMs?: number[]
   sfx?: (name: 'player-shuffle' | 'player-next' | 'player-play' | 'player-pause') => void
   onChange?: (state: RadioState) => void
+  /** True while the page is in a background tab (document.hidden). */
+  isHidden?: () => boolean
+  /** Current time in ms (injected so the self-test can use its own clock). */
+  now?: () => number
 }
+
+/** A pause of the current track this soon after a switch is treated as interference, not the user. */
+const INTERFERENCE_WINDOW_MS = 4000
+const MAX_INTERFERENCE_RETRIES = 3
 
 type Selection = { track: RadioTrack; token: number }
 
@@ -107,6 +119,11 @@ export class RadioEngine {
   private readonly catalogRefreshMs: number[]
   private readonly sfx: NonNullable<RadioOptions['sfx']>
   private readonly onChange: NonNullable<RadioOptions['onChange']>
+  private readonly isHidden: () => boolean
+  private readonly now: () => number
+  private lastSuppressAt = Number.NEGATIVE_INFINITY
+  private lastConfirmAt = Number.NEGATIVE_INFINITY
+  private interferenceRetries = 0
 
   constructor(members: RadioMember[], options: RadioOptions = {}) {
     this.members = members
@@ -117,6 +134,8 @@ export class RadioEngine {
     this.catalogRefreshMs = options.catalogRefreshMs ?? [4000, 15000, 45000]
     this.sfx = options.sfx ?? (() => {})
     this.onChange = options.onChange ?? (() => {})
+    this.isHidden = options.isHidden ?? (() => false)
+    this.now = options.now ?? (() => Date.now())
   }
 
   // ------------------------------------------------------------ wiring
@@ -151,6 +170,9 @@ export class RadioEngine {
     // FINISH, a late PLAY after we switched away, or music the user paused).
     if (!selected || selected.memberId !== memberId || (!this.wantPlay && !this.selection)) {
       widget.pause()
+      // SoundCloud answers a widget starting by pausing the others, which can hit
+      // the track we DO want: remember this so that pause is undone (handlePause).
+      this.lastSuppressAt = this.now()
       return
     }
     const token = this.token
@@ -169,6 +191,9 @@ export class RadioEngine {
       if (this.watchdog) this.timers.clearTimeout(this.watchdog)
       this.watchdog = null
       this.failures.delete(keyOf(memberId, id))
+      const isNewTrack = this.current?.memberId !== memberId || this.current?.id !== id
+      if (isNewTrack) this.interferenceRetries = 0
+      this.lastConfirmAt = this.now()
       this.current = this.describe(memberId, index, sound)
       this.selection = null
       this.wantPlay = true
@@ -180,6 +205,14 @@ export class RadioEngine {
     // Pauses we caused (switching, user pause) are expected; a pause of the
     // confirmed track that we did not ask for is surfaced as "paused".
     if (this.selection || this.current?.memberId !== memberId || !this.wantPlay) return
+    const now = this.now()
+    const nearSwitch = now - this.lastConfirmAt < INTERFERENCE_WINDOW_MS || now - this.lastSuppressAt < INTERFERENCE_WINDOW_MS
+    if (nearSwitch && this.interferenceRetries < MAX_INTERFERENCE_RETRIES) {
+      // Not the user: another widget's auto-advance made SoundCloud pause ours.
+      this.interferenceRetries += 1
+      this.widgets.get(memberId)?.play()
+      return
+    }
     this.wantPlay = false
     this.emit()
   }
@@ -188,7 +221,24 @@ export class RadioEngine {
     // Stop SoundCloud from auto-advancing inside this artist's list: the
     // engine decides what plays next.
     this.widgets.get(memberId)?.pause()
-    if (this.current?.memberId === memberId && !this.selection) this.next(true)
+    // In a background tab, stay in this widget: it is allowed to keep playing,
+    // while a different player may be blocked until the tab is visible again.
+    if (this.current?.memberId === memberId && !this.selection) this.next(true, this.isHidden() ? memberId : undefined)
+  }
+
+  /** Call when the tab becomes visible again: restart anything that stalled while hidden. */
+  resumeIfStalled(): void {
+    if (!this.wantPlay) return
+    if (this.selection) {
+      const { track, token } = this.selection
+      const widget = this.widgets.get(track.memberId)
+      if (!widget) return
+      widget.skip(track.index)
+      widget.play()
+      this.armWatchdog(track, token)
+      return
+    }
+    if (this.current) this.widgets.get(this.current.memberId)?.play()
   }
 
   handleError(memberId: string): void {
@@ -355,8 +405,21 @@ export class RadioEngine {
   }
 
   /** Pick the next bag track, avoiding the same track and (when possible) the same artist. */
-  private next(autoplay: boolean): boolean {
+  private next(autoplay: boolean, preferMember?: string): boolean {
     const last = this.selection?.track ?? this.current
+    if (preferMember) {
+      const sameWidget = (track: RadioTrack) => track.memberId === preferMember && (!last || track.id !== last.id) && !this.isBroken(track)
+      let pick = this.bag.find(sameWidget)
+      if (!pick) {
+        const options = this.allTracks().filter(sameWidget)
+        pick = options.length ? options[Math.floor(this.random() * options.length)] : undefined
+      }
+      if (pick) {
+        this.removeFromBag(pick)
+        this.select(pick, autoplay)
+        return true
+      }
+    }
     for (let attempt = 0; attempt < 2; attempt += 1) {
       if (!this.bag.length) this.rebuildBag()
       this.bag = this.bag.filter(track => !this.isBroken(track))
@@ -388,11 +451,22 @@ export class RadioEngine {
     for (const [memberId, other] of this.widgets) if (memberId !== track.memberId) other.pause()
     widget.setVolume(this.volume)
     widget.skip(track.index)
+    // play() right away too: background tabs may delay the timer by a second or more.
+    if (autoplay) widget.play()
     if (autoplay) this.timers.setTimeout(() => { if (this.token === token) widget.play() }, 40)
-    this.watchdog = this.timers.setTimeout(() => {
-      if (this.token === token && this.selection) this.skipBroken(track)
-    }, this.startTimeoutMs)
+    this.armWatchdog(track, token)
     this.emit()
+  }
+
+  private armWatchdog(track: RadioTrack, token: number): void {
+    if (this.watchdog) this.timers.clearTimeout(this.watchdog)
+    this.watchdog = this.timers.setTimeout(() => {
+      if (this.token !== token || !this.selection) return
+      // Hidden tab: the track may only be waiting for the tab to be visible
+      // again. Keep waiting instead of marking a good track as broken.
+      if (this.isHidden()) { this.armWatchdog(track, token); return }
+      this.skipBroken(track)
+    }, this.startTimeoutMs)
   }
 
   private cancelSelection(): void {

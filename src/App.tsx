@@ -1211,7 +1211,7 @@ function RadioBar({ visible, playing, setPlaying, request, volume, setVolume, on
   const [state, setState] = useState<RadioState | null>(null)
   const engineRef = useRef<RadioEngine | null>(null)
   if (!engineRef.current) {
-    engineRef.current = new RadioEngine(radioMembers, { volume, sfx: name => void playSfx(name), onChange: setState })
+    engineRef.current = new RadioEngine(radioMembers, { volume, sfx: name => void playSfx(name), onChange: setState, isHidden: () => document.hidden })
   }
   const engine = engineRef.current
   const lastPreload = useRef('')
@@ -1247,6 +1247,13 @@ function RadioBar({ visible, playing, setPlaying, request, volume, setVolume, on
   }, [])
 
   useEffect(() => { engine.setVolume(volume) }, [volume])
+
+  // Back from another tab: restart a track that could not start while hidden.
+  useEffect(() => {
+    const onVisible = () => { if (!document.hidden) engine.resumeIfStalled() }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => document.removeEventListener('visibilitychange', onVisible)
+  }, [])
 
   // App-level play state (ENTER WITH SOUND, collective drawer) -> engine.
   useEffect(() => {

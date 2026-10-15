@@ -22,8 +22,8 @@ function makeWorld(specs: MemberSpec[], seed: number): World {
 
 const members = (specs: MemberSpec[]): RadioMember[] => specs.map(spec => ({ id: spec.id, name: spec.id, profileUrl: `https://soundcloud.com/${spec.id}` }))
 
-function newEngine(world: World, seed: number) {
-  const engine = new RadioEngine(members(world.specs), { volume: 22, random: mulberry32(seed * 7 + 1), timers: world.clock, startTimeoutMs: 9000, catalogRefreshMs: [4000, 15000, 45000] })
+function newEngine(world: World, seed: number, extra: { isHidden?: () => boolean } = {}) {
+  const engine = new RadioEngine(members(world.specs), { volume: 22, random: mulberry32(seed * 7 + 1), timers: world.clock, startTimeoutMs: 9000, catalogRefreshMs: [4000, 15000, 45000], now: () => world.clock.now, ...extra })
   for (const [id, widget] of Object.entries(world.widgets)) {
     engine.attach(id, widget)
     widget.on('READY', m => engine.handleReady(m))
@@ -140,6 +140,59 @@ const BASE: MemberSpec[] = [
   const engine2 = newEngine(world2, 8)
   world2.clock.run(1000); engine2.playArtist('mundane'); world2.clock.run(7000)
   check('T9 artist chosen before its catalog loads plays once it loads', engine2.getState().current?.memberId === 'mundane' && playingWidgets(world2).length === 1)
+}
+
+{ // T10 SoundCloud pauses our new track when the old widget auto-advances: the radio must keep going
+  let kept = 0
+  const runs = 20
+  for (let seed = 1; seed <= runs; seed += 1) {
+    const world = makeWorld(BASE.map(spec => ({ ...spec, readyAt: 200 })), 100 + seed)
+    const engine = newEngine(world, 100 + seed)
+    world.clock.run(2000); engine.play(); world.clock.run(2500)
+    const first = playingWidgets(world)[0]
+    first.finish(); world.clock.run(2500)
+    const second = playingWidgets(world)[0]
+    // The finished widget auto-advances (late PLAY) and SoundCloud pauses the one we picked.
+    first.play(); world.clock.run(30)
+    second?.pause(); world.clock.run(3000)
+    if (playingWidgets(world).length === 1 && engine.getState().status === 'playing' && engine.getState().wantPlay) kept += 1
+  }
+  check('T10 a track change is not stopped by SoundCloud pausing the new widget', kept === runs, `${kept}/${runs} kept playing`)
+}
+
+{ // T11 a real pause later on (e.g. the keyboard media key) is still respected
+  const world = makeWorld(BASE.map(spec => ({ ...spec, readyAt: 200 })), 131)
+  const engine = newEngine(world, 131)
+  world.clock.run(2000); engine.play(); world.clock.run(2500)
+  world.clock.run(20000)
+  playingWidgets(world)[0]?.pause(); world.clock.run(1500)
+  check('T11 a pause long after the track started is respected', engine.getState().wantPlay === false && playingWidgets(world).length === 0)
+}
+
+{ // T12 background tab: the next track stays in the same widget; stalls do not mark tracks broken
+  let hidden = false
+  const world = makeWorld(BASE.map(spec => ({ ...spec, readyAt: 200 })), 141)
+  const engine = newEngine(world, 141, { isHidden: () => hidden })
+  world.clock.run(2000); engine.play(); world.clock.run(2500)
+  hidden = true
+  let sameWidget = 0
+  for (let i = 0; i < 6; i += 1) {
+    const widget = playingWidgets(world)[0]
+    const before = widget?.spec.id
+    widget?.finish(); world.clock.run(2500)
+    if (engine.getState().current?.memberId === before && playingWidgets(world).length === 1) sameWidget += 1
+  }
+  check('T12 hidden tab: after a song ends the next one plays in the same widget', sameWidget === 6, `${sameWidget}/6`)
+  // A selection that cannot start while hidden is kept, not skipped as broken.
+  const stuck = Object.values(world.widgets).find(w => !w.playing)!
+  const skippedBefore = engine.getState().skippedTracks
+  const realPlay = stuck.play.bind(stuck), realSkip = stuck.skip.bind(stuck)
+  stuck.play = () => {}; stuck.skip = (index: number) => { stuck.index = index }
+  engine.playArtist(stuck.spec.id); world.clock.run(30000)
+  check('T12 hidden tab: a track waiting to start is not marked broken', engine.getState().skippedTracks === skippedBefore)
+  stuck.play = realPlay; stuck.skip = realSkip
+  hidden = false; engine.resumeIfStalled(); world.clock.run(2500)
+  check('T12 back to the tab: the waiting track starts', engine.getState().current?.memberId === stuck.spec.id && playingWidgets(world).length === 1)
 }
 
 // ---------------------------------------------------------------- stress: old vs new
