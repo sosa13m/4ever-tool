@@ -2,9 +2,13 @@
 
 Herramientas de audio del colectivo **4EVER**. Son gratis y no piden cuenta.
 
+![4EVERTOOLS](docs/screenshots/inicio.png)
+
 ## Convertir y descargar audio
 
 Convierte un link de YouTube, un link directo a un archivo de audio o video, o un archivo propio a **MP3** o **WAV**.
+
+![Conversor](docs/screenshots/conversor.png)
 
 1. Elige **PASTE LINK** (pega el link) o **UPLOAD FILE** (sube tu archivo).
 2. Elige el formato:
@@ -22,6 +26,8 @@ Convierte un link de YouTube, un link directo a un archivo de audio o video, o u
 
 Detecta el tempo y la tonalidad de un tema.
 
+![BPM + KEY](docs/screenshots/bpm-key.png)
+
 1. Arrastra una canción o un loop.
 2. Si quieres, elige el **BPM RANGE** del género. Ayuda a decidir entre half-time y double-time.
 3. Obtienes:
@@ -35,6 +41,8 @@ El análisis ocurre en tu navegador: el audio no se sube.
 ## 4EVER LAB
 
 Edita un sample, loop o tema (MP3, WAV, FLAC, M4A u OGG) directo en el navegador.
+
+![4EVER LAB](docs/screenshots/lab.png)
 
 - **Recortar:** elige la parte que quieres con **START / END** sobre la onda.
 - **REVERSE:** da vuelta el audio.
